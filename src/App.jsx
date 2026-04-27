@@ -466,16 +466,16 @@ const App = () => {
                 />
               </article>
             ) : (
-              <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 md:grid md:grid-cols-2 md:gap-12 pb-8 px-2 md:px-0">
+              <div className="flex overflow-x-auto items-stretch snap-x snap-mandatory hide-scrollbar gap-6 md:grid md:grid-cols-2 md:auto-rows-fr md:gap-12 pb-8 px-2 md:px-0">
                 {data[activeTab].map((item, idx) => (
                   <article key={idx} className="flex-shrink-0 w-[85vw] md:w-auto snap-center bg-[#1a1a1a]/85 backdrop-blur-xl rounded-[3rem] md:rounded-[4rem] p-8 md:p-12 shadow-2xl border border-white/10 flex flex-col h-full hover:shadow-[#f28d35]/10 hover:-translate-y-3 transition-all duration-500">
                     <div className="flex justify-between items-start mb-8 md:mb-10">
                       <h3 className="text-3xl md:text-4xl font-black text-[#e8e7e7] leading-tight font-heading tracking-tighter">{item.title}</h3>
-                      <div className="p-4 md:p-5 bg-[#f28d35] rounded-2xl md:rounded-3xl text-[#1a1a1a] shadow-2xl ml-4">{item.icon || <Info className="text-[#1a1a1a]" />}</div>
+                      <div className="p-4 md:p-5 bg-[#f28d35] rounded-2xl md:rounded-3xl text-[#1a1a1a] shadow-2xl ml-4 flex-shrink-0">{item.icon || <Info className="text-[#1a1a1a]" />}</div>
                     </div>
                     
                     <div className="flex items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#1a1a1a] bg-[#f28d35] px-4 md:px-6 py-2 md:py-3 rounded-full w-fit mb-8 md:mb-12 font-heading shadow-lg shadow-[#f28d35]/20">
-                      <Info className="w-4 h-4 mr-2.5" />
+                      <Info className="w-4 h-4 mr-2.5 flex-shrink-0" />
                       {item.benefit}
                     </div>
 
@@ -493,7 +493,7 @@ const App = () => {
 
                     <button 
                       onClick={() => setSelectedRecipe(item)}
-                      className="w-full py-5 md:py-6 bg-white/5 text-[#f28d35] border-2 border-[#f28d35] text-base md:text-lg font-black rounded-[1.5rem] md:rounded-3xl hover:bg-[#f28d35] hover:text-[#1a1a1a] shadow-2xl transition-all flex items-center justify-center active:scale-95 font-heading tracking-tighter"
+                      className="w-full py-5 md:py-6 bg-white/5 text-[#f28d35] border-2 border-[#f28d35] text-base md:text-lg font-black rounded-[1.5rem] md:rounded-3xl hover:bg-[#f28d35] hover:text-[#1a1a1a] shadow-2xl transition-all flex items-center justify-center active:scale-95 font-heading tracking-tighter mt-auto"
                     >
                       START THE METHOD
                     </button>
