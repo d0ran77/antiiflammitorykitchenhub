@@ -110,7 +110,7 @@ const App = () => {
     ],
     breakfast: [
       { title: 'Overnight Omega Oats', benefit: 'Gut Health & Fibre', ingredients: ['50g jumbo oats', '1 tbsp chia/flax', '150ml almond milk', '50g blueberries', '20g walnuts'], instructions: ['Combine oats, seeds, and almond milk in a glass jar.', 'Stir well and seal the lid.', 'Refrigerate overnight (or for at least 6 hours).', 'In the morning, top with fresh blueberries and walnuts just before eating.'] },
-      { title: 'Turmeric Scrambled Eggs', benefit: 'Morning Protein Boost', ingredients: ['2 eggs', '1/2 tsp turmeric', 'Pinch black pepper', 'Handful spinach', '1 slice sourdough'], instructions: ['Whisk the eggs in a bowl with turmeric and a generous pinch of black pepper.', 'Heat a little olive oil in a non-stick pan over medium heat.', 'Pour in the egg mixture and scramble gently.', 'When the eggs are nearly set, toss in the spinach and stir until wilted.', 'Serve immediately on toasted sourdough.'] },
+      { title: 'Turmeric Scrambled Eggs', benefit: 'Morning Protein Boost', ingredients: ['2 eggs', '1/2 tsp turmeric', 'Pinch black pepper', 'Handful spinach', '1 slice sourdough'], instructions: ['Whisk the eggs in a bowl with turmeric and a generous pinch of black pepper.', 'Heat a little olive oil in a duo-stick pan over medium heat.', 'Pour in the egg mixture and scramble gently.', 'When the eggs are nearly set, toss in the spinach and stir until wilted.', 'Serve immediately on toasted sourdough.'] },
       { title: 'Berry & Chia Pot', benefit: 'Antioxidant Power', ingredients: ['3 tbsp chia seeds', '200ml coconut milk', '1/2 tsp vanilla', '75g raspberries', '1 tbsp hemp hearts'], instructions: ['Whisk chia seeds, coconut milk, and vanilla in a bowl or jar.', 'Wait 5 minutes and whisk again to prevent clumping.', 'Cover and refrigerate for at least 30 minutes (ideally overnight).', 'Layer with fresh raspberries and hemp hearts before serving.'] },
       { title: 'Smashed Avocado', benefit: 'Healthy Fats & Zinc', ingredients: ['1/2 avocado', '1 slice sourdough', '1 tbsp pumpkin seeds', 'Squeeze of lemon', 'Olive oil'], instructions: ['Toast the sourdough bread.', 'In a small bowl, mash the avocado with lemon juice and a tiny pinch of salt.', 'Spread the mash onto the toast.', 'Sprinkle with pumpkin seeds and a light drizzle of extra virgin olive oil.'] },
       { title: 'Green Shakshuka', benefit: 'Iron & Immune Support', ingredients: ['2 eggs', '1 handful kale', '1 handful spinach', '1/2 avocado', '1/2 tsp cumin'], instructions: ['Wilt kale and spinach in a pan with cumin and a little olive oil.', 'Make two wells in the greens and crack the eggs in.', 'Cover the pan and cook until eggs are set.', 'Serve topped with sliced avocado.'] },
@@ -414,14 +414,15 @@ const App = () => {
         .animate-gentle-bounce { animation: gentle-bounce 3s ease-in-out infinite; }
       `}</style>
 
-      {/* GLOBAL BACKGROUND PHOTO */}
+      {/* GLOBAL BACKGROUND PHOTO - FIXED MOBILE PERFORMANCE */}
       <div 
-        className="fixed inset-0 z-[-1]"
+        className="fixed inset-0 z-[-1] h-[100dvh] w-full"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=2000')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          // Removed backgroundAttachment: 'fixed' as it is glitchy on mobile.
+          // Since the div itself is fixed, the effect is preserved without the bugs.
         }}
       >
         <div className="absolute inset-0 bg-[#e8e7e7]/65 backdrop-blur-[5px]"></div>
