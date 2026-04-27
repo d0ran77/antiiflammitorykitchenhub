@@ -1,0 +1,1 @@
+git add . && git commit -m "Final UI polish: vertical carousel, header fix, and footer refinement" && git push origin main
