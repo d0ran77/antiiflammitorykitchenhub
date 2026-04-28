@@ -114,11 +114,11 @@ const App = () => {
         title: 'Golden Glow', benefit: 'Immunity & Systemic Inflammation', icon: <Zap />, 
         ingredients: ['75g frozen pineapple chunks', '75g frozen mango chunks', '1 large handful fresh baby spinach', '1.5cm fresh ginger (peeled and grated)', '1/2 tsp ground turmeric', '1 tbsp black chia seeds', '240ml chilled coconut water'], 
         instructions: [
-          'Peel the fresh ginger using the edge of a spoon and grate it finely to avoid large spicy chunks.',
-          'Add the frozen fruit and spinach to the blender first, then top with the spices and seeds.',
-          'Pour in the chilled coconut water.',
-          'Blend on high speed for 60 seconds until the chia seeds are fully incorporated and the texture is silky smooth.',
-          'Serve immediately in a chilled glass to preserve the live enzymes.'
+          'Peel the fresh ginger using the edge of a spoon to scrape the skin off, then grate it finely into a paste.',
+          'Place the baby spinach at the bottom of the blender, followed by the frozen fruit and the spices.',
+          'Pour in the chilled coconut water, ensuring it covers at least half of the fruit.',
+          'Blend on high speed for 45-60 seconds until the chia seeds are broken down and the texture is electric green and smooth.',
+          'Serve immediately in a glass to maintain maximum antioxidant potency.'
         ],
         description: createDesc(
           "This vibrant blend acts as a powerful morning reset. The **natural bromelain** found in pineapple helps your body **digest proteins** more effectively and significantly **reduces internal swelling**. The **Vitamin C** from mango and spinach provides an antioxidant-rich energy lift that protects your cells from daily oxidative stress.",
@@ -129,12 +129,11 @@ const App = () => {
         title: 'Soothing Relief', benefit: 'Joint Pain & Sensitive Stomach', icon: <Info />, 
         ingredients: ['75g ripe papaya (cubed)', '75g frozen strawberries', '2.5cm fresh ginger root', '60ml plain unsweetened kefir or coconut yogurt', '1 tbsp raw hemp hearts', '180ml pure aloe vera juice (food grade)'], 
         instructions: [
-          'Scoop out the black seeds from the papaya and cube the flesh.',
-          'Grate the fresh ginger finely to release the gingerol-rich oils.',
-          'Place the papaya, frozen strawberries, ginger, and hemp hearts into the blender.',
-          'Add the probiotic-rich kefir and the soothing aloe vera juice.',
-          'Pulse 3 times to break up the fruit, then blend on high until creamy.',
-          'Sip slowly to allow the aloe and ginger to coat the digestive tract.'
+          'Remove the seeds from the papaya and cube the flesh into small pieces.',
+          'Grate the fresh ginger root finely; the juice of the ginger is just as important as the pulp.',
+          'Add all solid ingredients to the blender, then pour in the liquid kefir and aloe vera juice.',
+          'Blend on high speed until the hemp hearts are completely pulverized into the cream.',
+          'Sip slowly to allow the aloe and ginger to coat and soothe the digestive tract.'
         ],
         description: createDesc(
           "Specifically designed for those with **sensitive digestive systems** or **joint stiffness**, this smoothie uses **aloe vera** and **papaya** to coat and protect the stomach lining. The **strawberries** provide a dense hit of antioxidants that help reduce the heat of systemic inflammation throughout the body.",
@@ -145,11 +144,11 @@ const App = () => {
         title: 'Radiant Skin Elixir', benefit: 'Collagen & Skin Elasticity', icon: <Sparkles />, 
         ingredients: ['75g mixed organic berries', '1/4 ripe avocado', '1 handful fresh spinach', '1 tbsp ground flaxseeds', '1/2 tsp ground cinnamon', '240ml high-quality green tea (brewed and chilled)'], 
         instructions: [
-          'Brew one cup of green tea in advance and allow it to chill completely in the refrigerator.',
-          'Scoop the avocado flesh from the skin—the healthy fats are essential for nutrient absorption.',
-          'Combine the berries, avocado, spinach, flaxseeds, and cinnamon in the blender.',
-          'Pour in the chilled green tea.',
-          'Blend on high for 45-60 seconds until the avocado has created a silky, milkshake-like texture.'
+          'Brew your green tea 30 minutes in advance and let it chill in the fridge or freezer.',
+          'Scoop the avocado flesh directly into the blender—its fats are required to absorb the Vitamin K in the spinach.',
+          'Add the berries, spinach, ground flax, and cinnamon.',
+          'Pour the chilled tea over the mixture and blend on high for 60 seconds.',
+          'The result should be a silky, deep-purple blend that is rich in skin-protecting lipids.'
         ],
         description: createDesc(
           "This is a beauty-focused blend that works from the inside out. The **healthy monounsaturated fats** from **avocado** and **Omega-3s** from **flaxseeds** help maintain the skin's **lipid barrier**, effectively reducing redness and preventing the chronic dryness that leads to premature aging.",
@@ -160,11 +159,11 @@ const App = () => {
         title: 'Deep Sleep Dreamer', benefit: 'Nervous System & Rest', icon: <Moon />, 
         ingredients: ['75g frozen tart cherries (Montmorency)', '1/2 small ripe banana', '30g raw walnut halves', '1 tbsp unsweetened almond butter', '1 tiny dash ground cinnamon', '240ml chamomile tea (brewed and cooled)'], 
         instructions: [
-          'Brew a strong cup of chamomile tea using 2 tea bags, then allow it to reach room temperature or chill.',
-          'Ensure the tart cherries are the "Montmorency" variety for maximum melatonin content.',
-          'Add all ingredients to the blender, ensuring the walnuts are raw and unsalted.',
-          'Blend on a lower speed initially to crush the walnuts, then increase to high until perfectly smooth.',
-          'Drink this 1-2 hours before bed as part of a winding-down ritual.'
+          'Prepare your chamomile tea by steeping two bags in one cup of hot water, then allow it to reach room temperature.',
+          'Combine the frozen tart cherries, banana, and walnuts in the blender.',
+          'Add the almond butter and a pinch of cinnamon for blood sugar stability.',
+          'Pour in the chamomile tea and blend until the walnuts are no longer grainy.',
+          'Enjoy 1 hour before sleep to signal your body to produce natural melatonin.'
         ],
         description: createDesc(
           "A functional evening treat designed to switch your nervous system from 'fight-or-flight' to **'rest-and-digest'**. The combination of **magnesium** and **healthy fats** creates a steady blood sugar environment, making it easier for your brain to initiate a deep, restorative sleep cycle.",
@@ -175,11 +174,11 @@ const App = () => {
         title: 'Matcha Green Giant', benefit: 'Cellular Health & Energy', icon: <Leaf />, 
         ingredients: ['1 tsp ceremonial grade matcha powder', '1 large handful fresh spinach', '75g frozen pineapple chunks', '1 tbsp raw hemp hearts', '240ml unsweetened almond milk'], 
         instructions: [
-          'Sift the matcha powder through a fine-mesh sieve into the blender to prevent clumping.',
-          'Add the spinach, frozen pineapple, and hemp hearts.',
-          'Pour in the almond milk.',
-          'Blend on high speed until the mixture is a vibrant, electric green and completely smooth.',
-          'Drink immediately to benefit from the high antioxidant concentration.'
+          'Sift your matcha powder through a small sieve to ensure there are no bitter clumps.',
+          'Add the spinach and frozen pineapple to the blender first.',
+          'Pour in the almond milk and add the hemp hearts for high-quality plant protein.',
+          'Blend on high for 90 seconds until the mixture is frothy and electric green.',
+          'Drink this mid-morning to maintain a steady, non-inflammatory focus.'
         ],
         description: createDesc(
             "This drink provides a highly focused, **sustained energy lift** without the jittery crash associated with coffee. It floods your cells with **chlorophyll**, a natural detoxifier, and **high-quality plant proteins** from hemp that support muscle maintenance.",
@@ -190,11 +189,11 @@ const App = () => {
         title: 'Cherry Cacao Recovery', benefit: 'Muscle Recovery & Antioxidants', icon: <Sparkles />, 
         ingredients: ['75g frozen tart cherries', '1 tbsp raw organic cacao powder', '1/4 ripe avocado', '240ml unsweetened oat milk', '1 tsp pure maple syrup (optional)'], 
         instructions: [
-          'Add the frozen cherries and raw cacao powder to the blender.',
-          'Scoop in the avocado for healthy fats that support hormone production.',
-          'Add the oat milk and maple syrup if you prefer a slightly sweeter finish.',
-          'Blend on high for 60 seconds until the texture is like a thick chocolate mousse.',
-          'Perfect as a post-workout fuel to reduce muscle soreness.'
+          'Pit your cherries if using fresh, though frozen is recommended for a thicker texture.',
+          'Combine the cherries, raw cacao, and avocado in the blender.',
+          'Add the oat milk; it provides a gentle sweetness that balances the rich cacao.',
+          'Blend on high until the texture is like a liquid chocolate truffle.',
+          'Consume within 30 minutes of exercise to maximize the muscle recovery window.'
         ],
         description: createDesc(
             "An ideal post-workout recovery drink. The **magnesium** in cacao helps relax tense muscles, while the **tart cherries** contain specific compounds that actively help your body **flush out metabolic waste** and reduce the inflammation caused by physical exertion.",
@@ -203,14 +202,13 @@ const App = () => {
       },
       { 
         title: 'Beetroot Blood Builder', benefit: 'Liver Detox & Circulation', icon: <Zap />, 
-        ingredients: ['1 small cooked beetroot (not in vinegar)', '75g frozen raspberries', '1 tbsp ground flaxseeds', '240ml pure coconut water'], 
+        ingredients: ['1 small cooked beetroot (unpickled)', '75g frozen raspberries', '1 tbsp ground flaxseeds', '240ml pure coconut water'], 
         instructions: [
-          'Ensure the beetroot is plain, cooked, and cooled (avoid pickled versions).',
-          'Roughly chop the beetroot to assist the blender blades.',
-          'Combine the beetroot, frozen raspberries, and flaxseeds.',
-          'Pour in the hydrating coconut water.',
-          'Blend on high until the mixture is a deep, jewel-toned red.',
-          'Drink after a period of high stress or travel to support liver clearing.'
+          'Ensure the beetroot is plain (steamed or roasted) and not pickled in vinegar.',
+          'Chop the beetroot into quarters and place it in the blender with the frozen raspberries.',
+          'Add the flaxseeds and the coconut water—this provides natural electrolytes.',
+          'Blend on high for 60 seconds until the mixture is a deep, jewel-toned magenta.',
+          'Perfect for post-travel or after a period of poor diet to support liver clearance.'
         ],
         description: createDesc(
             "Beetroot is a master liver supporter. This earthy yet sweet smoothie helps **improve oxygen delivery** to your muscles and provides a significant boost to your body's natural **Phase 2 detoxification** pathways, helping you feel lighter and more energized.",
@@ -219,14 +217,13 @@ const App = () => {
       },
       { 
         title: 'Spiced Carrot Cake', benefit: 'Vision & Blood Sugar Balance', icon: <Coffee />, 
-        ingredients: ['1 medium carrot (finely chopped)', '2.5cm fresh ginger root', '1/2 tsp ground cinnamon', '30g raw walnut halves', '240ml unsweetened almond milk'], 
+        ingredients: ['1 medium carrot (chopped)', '2.5cm fresh ginger root', '1/2 tsp ground cinnamon', '30g raw walnut halves', '240ml unsweetened almond milk'], 
         instructions: [
-          'Peel and roughly chop the carrot into 1cm pieces to ensure it blends perfectly.',
-          'Grate the fresh ginger to maximize the release of its anti-inflammatory compounds.',
-          'Add the carrot, ginger, cinnamon, and walnuts to the blender jar.',
+          'Peel the carrot and chop it into very small cubes to help the blender achieve a smooth finish.',
+          'Grate the fresh ginger and add it along with the cinnamon and walnuts.',
           'Pour in the almond milk.',
-          'Blend on high speed for at least 60-90 seconds to ensure the carrot is completely pulverized into a smooth liquid.',
-          'The result should taste like a liquid version of a healthy carrot cake.'
+          'Blend on high speed for at least 90 seconds to ensure the carrot is completely smooth.',
+          'This warming blend is fantastic for stabilizing energy levels in the late afternoon.'
         ],
         description: createDesc(
             "This blend allows you to enjoy the flavors of a classic treat while **stabilizing your energy levels**. It is exceptionally rich in **fiber** and warming spices that support your metabolism and prevent the afternoon energy slump.",
@@ -242,8 +239,7 @@ const App = () => {
           'In a clean glass jar, combine the jumbo oats and the seeds.',
           'Pour in the milk and stir thoroughly to ensure no chia seeds clump at the bottom.',
           'Seal the jar and place it in the refrigerator for at least 6 hours, ideally overnight.',
-          'In the morning, the oats will have absorbed the liquid into a creamy pudding.',
-          'Top with fresh blueberries and the crushed walnuts just before eating to maintain the crunch.'
+          'In the morning, top with fresh blueberries and the crushed walnuts just before eating to maintain the crunch.'
         ],
         description: createDesc(
             "A zero-effort breakfast that acts as a **prebiotic feast** for your gut microbiome. The high **Omega-3 content** from walnuts and seeds ensures your brain is fueled and your joints are lubricated for the day ahead.",
@@ -256,149 +252,485 @@ const App = () => {
         instructions: [
           'In a small bowl, crack the eggs and whisk them with the turmeric and black pepper—the pepper is vital for turmeric absorption.',
           'Heat a teaspoon of extra virgin olive oil in a non-stick pan over medium heat.',
-          'Pour the egg mixture into the warm pan and let it sit for 10 seconds.',
-          'Gently fold the eggs with a spatula until they are 80% set.',
-          'Add the fresh spinach to the pan and toss for 30 seconds until just wilted.',
-          'Remove from the heat immediately and serve on top of the warm sourdough toast.'
+          'Gently fold the eggs with a spatula until they are 80% set, then add the fresh spinach to the pan.',
+          'Toss for 30 seconds until just wilted and serve immediately on the warm sourdough toast.'
         ],
         description: createDesc(
-            "A savory, protein-dense start that utilizes **turmeric**, the most studied anti-inflammatory spice in the world. The addition of **black pepper** is the 'master key' that unlocks the healing potential of this meal.",
-            "Turmeric’s active compound, **curcumin**, has low bioavailability on its own. The **piperine** in black pepper increases curcumin absorption by up to **2,000%**, allowing it to actively block inflammatory enzymes like **COX-2**, which are responsible for pain and swelling."
+            "A savory, protein-dense start utilizing **turmeric**, the world's most studied anti-inflammatory spice. The addition of **black pepper** is the 'master key' to this meal.",
+            "Turmeric’s active compound, **curcumin**, has low bioavailability on its own. The **piperine** in black pepper increases curcumin absorption by up to **2,000%**, allowing it to block inflammatory enzymes like **COX-2**."
         )
       },
       { 
         title: 'Berry & Chia Pot', benefit: 'Antioxidant Power', 
-        ingredients: ['3 tbsp black chia seeds', '200ml unsweetened coconut milk (from a carton)', '1/2 tsp pure vanilla extract', '75g fresh raspberries', '1 tbsp raw hemp hearts'], 
+        ingredients: ['3 tbsp black chia seeds', '200ml unsweetened coconut milk (carton)', '1/2 tsp pure vanilla extract', '75g fresh raspberries', '1 tbsp raw hemp hearts'], 
         instructions: [
           'Whisk the chia seeds, coconut milk, and vanilla extract together in a small bowl.',
           'Wait 5 minutes for the seeds to begin swelling, then whisk again vigorously to prevent any clumps.',
-          'Cover and refrigerate for at least 30 minutes (or overnight for a thicker texture).',
-          'Before serving, stir the mixture one last time.',
-          'Layer the raspberries on top and finish with a sprinkle of hemp hearts for added plant protein.'
+          'Cover and refrigerate for at least 30 minutes.',
+          'Before serving, layer the raspberries on top and finish with a sprinkle of hemp hearts.'
         ],
         description: createDesc(
-            "A light, pudding-like breakfast that is **incredibly gentle** on the digestive tract. It is the perfect option for those who find traditional heavy breakfasts difficult to digest or who struggle with morning bloating.",
-            "**Chia seeds** are a powerhouse source of **Alpha-Linolenic Acid (ALA)**, a plant-based Omega-3 that reduces **C-reactive protein** levels in the blood. Combined with the **anthocyanins** in raspberries, this pot provides a massive spectrum of **cellular protection** against free radical damage."
+            "A cooling, pudding-like breakfast that is **incredibly gentle** on the digestive tract. Perfect for those who struggle with morning bloating.",
+            "**Chia seeds** are a powerhouse source of **ALA Omega-3**, which reduces **C-reactive protein** levels. Combined with the **anthocyanins** in raspberries, this pot provides massive **cellular protection**."
         )
       },
       { 
         title: 'Smashed Avocado', benefit: 'Healthy Fats & Zinc', 
-        ingredients: ['1/2 large ripe avocado', '1 slice toasted sourdough or rye bread', '1 tbsp raw pumpkin seeds (pepitas)', '1 small squeeze fresh lemon juice', '1 tsp extra virgin olive oil'], 
+        ingredients: ['1/2 large ripe avocado', '1 slice toasted sourdough or rye bread', '1 tbsp raw pumpkin seeds', '1 small squeeze fresh lemon juice', '1 tsp extra virgin olive oil'], 
         instructions: [
           'Toast your bread until golden and firm.',
           'In a small bowl, mash the avocado flesh with the lemon juice and a tiny pinch of sea salt.',
           'Spread the avocado thickly onto the warm toast.',
-          'Sprinkle the pumpkin seeds over the top—they provide essential zinc for immunity.',
-          'Finish with a light drizzle of high-quality extra virgin olive oil to increase the absorption of fat-soluble vitamins.'
+          'Sprinkle the pumpkin seeds over the top and finish with a light drizzle of olive oil.'
         ],
         description: createDesc(
-            "This classic dish is a nutritional masterpiece. The combination of **monounsaturated fats** and **zinc-rich seeds** creates a shield for your heart and a massive boost for your **immune system's resilience**.",
-            "**Oleic acid** found in both avocado and extra virgin olive oil is a healthy fat that significantly reduces inflammatory markers. **Pumpkin seeds** provide a significant dose of **zinc**, a mineral absolutely essential for the development and function of **T-cells and neutrophils**."
+            "A nutritional masterpiece. The combination of **monounsaturated fats** and **zinc-rich seeds** creates a shield for your heart and boosts **immune resilience**.",
+            "**Oleic acid** found in avocado and olive oil significantly reduces inflammatory markers. **Pumpkin seeds** provide **zinc**, a mineral absolutely essential for the development and function of **T-cells**."
+        )
+      },
+      { 
+        title: 'Green Shakshuka', benefit: 'Iron & Immune Support', 
+        ingredients: ['2 eggs', '1 large handful kale (chopped)', '1 handful baby spinach', '1/2 avocado', '1/2 tsp ground cumin'], 
+        instructions: [
+          'Sauté the kale and spinach in a pan with cumin and olive oil over medium heat until softened.',
+          'Use a spoon to create two small wells in the greens.',
+          'Crack an egg into each well, cover the pan with a lid, and cook for 3-5 minutes until the whites are set.',
+          'Serve directly from the pan topped with sliced avocado.'
+        ],
+        description: createDesc(
+            "A vibrant, low-carb start. Packing two servings of **leafy greens** into your first meal provides the minerals needed for deep cellular repair.",
+            "**Vitamin K** and **chlorophyll** in kale and spinach help alkalize the body and reduce oxidative stress. The **healthy monounsaturated fats** in the avocado make the iron in the greens much more bioavailable."
+        )
+      },
+      { 
+        title: 'Sweet Potato Toast', benefit: 'Sustained Energy & Potassium', 
+        ingredients: ['2 slices sweet potato (1cm thick)', '2 tbsp unsweetened almond butter', '1/2 banana (sliced)', '1 tsp black chia seeds'], 
+        instructions: [
+          'Toast the sweet potato slices in a standard toaster 2-3 times on the highest setting until tender, or bake at 200°C for 15 minutes.',
+          'Spread each warm slice with almond butter.',
+          'Top with the banana slices and a sprinkle of chia seeds.',
+          'A fantastic gluten-free alternative that provides long-lasting fuel.'
+        ],
+        description: createDesc(
+            "A clever, whole-food alternative to bread. Provides a steady release of energy and a massive dose of **Vitamin A** for tissue repair.",
+            "**Sweet potatoes** have a **low glycemic index**, preventing the insulin spikes that cause inflammation. They are also rich in **beta-carotene**, which protects your body's mucosal barriers."
+        )
+      },
+      { 
+        title: 'Anti-Inflammatory Pancakes', benefit: 'Comfort Food Reimagined', 
+        ingredients: ['50g organic buckwheat flour', '1 large free-range egg', '100ml unsweetened almond milk', '50g fresh blueberries', '1/2 tsp ground cinnamon'], 
+        instructions: [
+          'In a bowl, whisk the buckwheat flour, egg, milk, and cinnamon into a smooth batter.',
+          'Gently fold in the fresh blueberries.',
+          'Heat a non-stick pan over medium heat with a little coconut oil.',
+          'Pour small amounts of batter and cook until bubbles form on top, then flip and cook until golden brown.',
+          'Serve warm with a tiny drizzle of honey if desired.'
+        ],
+        description: createDesc(
+            "Indulge without the inflammatory consequences of refined flour. **Buckwheat** is a nutrient-dense seed that supports heart health.",
+            "Buckwheat contains **rutin**, a bioflavonoid that strengthens blood vessels and has potent anti-inflammatory effects. **Anthocyanins** in blueberries remain stable even when lightly heated."
+        )
+      },
+      { 
+        title: 'Smoked Salmon Frittata', benefit: 'Brain Nourishment', 
+        ingredients: ['3 eggs', '50g smoked salmon (torn)', '50g asparagus tips', '1 tbsp fresh dill (chopped)'], 
+        instructions: [
+          'Whisk the eggs in a bowl with the fresh dill.',
+          'Lightly sauté the asparagus tips in an oven-proof pan for 3 minutes.',
+          'Pour the eggs over the asparagus and layer the torn salmon on top.',
+          'Cook on the stove for 2 minutes, then finish under a preheated grill (broiler) for 2-3 minutes until set and golden.'
+        ],
+        description: createDesc(
+            "A high-protein, high-omega-3 breakfast that fuels your brain and keeps your **joints lubricated** for the day ahead.",
+            "Oily fish like salmon provides **DHA and EPA**, which are essential for reducing **neuro-inflammation**. **Asparagus** acts as a gentle diuretic, helping the body flush out inflammatory toxins."
         )
       }
     ],
     lunch: [
         { 
           title: 'Quinoa & Beetroot Salad', benefit: 'Liver Detoxification', 
-          ingredients: ['100g cooked white or red quinoa', '1 medium cooked beetroot (plain)', '1/2 ripe avocado (sliced)', '1 large handful fresh rocket', 'Dressing: 1 tbsp olive oil + 1 tsp lemon + 1/2 tsp grated ginger'], 
+          ingredients: ['100g cooked white quinoa', '1 medium cooked beetroot (plain)', '1/2 ripe avocado (sliced)', '1 large handful fresh rocket'], 
           instructions: [
-            'Cook the quinoa in advance and allow it to cool completely (or use pre-cooked packs for speed).',
-            'Slice the cooked beetroot and the avocado into bite-sized pieces.',
-            'In a large bowl, toss the fresh rocket with the cooled quinoa.',
-            'Whisk the dressing ingredients in a small cup until emulsified.',
-            'Top the salad with the beetroot and avocado, then drizzle with the ginger-lemon dressing.',
-            'Toss gently to ensure the delicate avocado doesn’t break apart.'
+            'Combine the cooled quinoa and fresh rocket in a large mixing bowl.',
+            'Slice the beetroot into small wedges and add to the bowl.',
+            'Prepare a dressing using 1 tbsp olive oil, a squeeze of lemon, and 1/2 tsp of grated ginger.',
+            'Toss the salad gently with the dressing.',
+            'Place the avocado slices on top just before serving to prevent mashing.'
           ],
           description: createDesc(
-              "A refreshing, colorful lunch that supports your **liver's natural filtering ability**. The wide variety of colors indicates a broad spectrum of **protective phytonutrients** that neutralize daily environmental toxins.",
-              "**Quinoa** is a complete plant protein that provides the essential amino acids necessary for **tissue repair**. The **betalains** in beetroot support the liver's **Phase 2 detoxification process**, neutralizing pro-inflammatory substances before they can circulate and cause damage."
+              "A refreshing lunch supporting your **liver's natural filtering ability**. The colors indicate a broad spectrum of **protective phytonutrients**.",
+              "**Quinoa** is a complete protein for **tissue repair**. The **betalains** in beetroot support the liver's **Phase 2 detoxification**, neutralizing pro-inflammatory substances before they cause damage."
           )
         },
         { 
           title: 'Red Lentil & Ginger Soup', benefit: 'Easy Digestion', 
-          ingredients: ['100g dried red split lentils', '400ml low-sodium organic vegetable stock', '2.5cm fresh ginger (grated)', '1 tsp ground turmeric', '1/2 clove garlic (minced)'], 
+          ingredients: ['100g red split lentils', '400ml low-sodium organic vegetable stock', '2.5cm fresh ginger (grated)', '1 tsp ground turmeric'], 
           instructions: [
-            'Rinse the red lentils under cold water until the water runs clear.',
-            'In a medium pot, combine the lentils, vegetable stock, grated ginger, turmeric, and minced garlic.',
-            'Bring to a boil, then immediately reduce the heat to low.',
-            'Simmer for 20 minutes with the lid slightly ajar until the lentils have completely softened and become mushy.',
-            'For an ultra-smooth, easy-to-digest texture, use a stick blender to cream the soup directly in the pot.',
-            'Season with a tiny pinch of sea salt and serve warm.'
+            'Rinse the red lentils thoroughly under cold water.',
+            'In a medium pot, simmer the lentils in the vegetable stock with the ginger and turmeric for 20 minutes.',
+            'Once the lentils are very soft, use a stick blender to cream the soup until smooth.',
+            'This reduces the digestive effort required by the body while providing warming relief.'
           ],
           description: createDesc(
-              "Warm, grounding, and incredibly **soothing for the gut**. This soup is specifically formulated for days when your digestion feels sensitive or sluggish, providing comfort without the inflammatory load of dairy.",
-              "**Gingerol** and **shogaol** in fresh ginger have been proven to **speed up gastric emptying**, which prevents inflammatory food particles from lingering too long in the digestive tract. **Red lentils** provide soluble fiber to gently move toxins out of the body."
+              "Warm, grounding, and **soothing for the gut**. Formulated for days when your digestion feels sensitive, providing comfort without the load of dairy.",
+              "**Gingerol** and **shogaol** in ginger speed up **gastric emptying**, preventing inflammatory food particles from lingering. **Red lentils** provide soluble fiber to move toxins out of the body."
+          )
+        },
+        { 
+          title: 'Mackerel on Rye', benefit: 'High Omega-3 Intake', 
+          ingredients: ['1 tinned mackerel fillet (in olive oil)', '2 slices toasted rye bread', '1 large handful fresh rocket', '1 tsp apple cider vinegar'], 
+          instructions: [
+            'Lightly toast the rye bread until firm.',
+            'Flake the mackerel fillet onto the toast, including a teaspoon of the omega-rich olive oil from the tin.',
+            'In a small bowl, toss the rocket with apple cider vinegar to support stomach acid.',
+            'Pile the dressed rocket on top of the fish and serve immediately.'
+          ],
+          description: createDesc(
+              "One of the most potent anti-inflammatory lunches available. **Mackerel** is an Omega-3 powerhouse that directly targets systemic pain.",
+              "Mackerel is exceptionally high in **EPA/DHA Omega-3s**, which compete with pro-inflammatory Omega-6s. **Rye bread** provides a slower insulin response than wheat, further reducing inflammatory potential."
+          )
+        },
+        { 
+          title: 'Hummus & Veg Wrap', benefit: 'Plant Diversity', 
+          ingredients: ['1 wholemeal or gluten-free wrap', '2 tbsp organic hummus', '100g mixed roasted Mediterranean vegetables', '1 handful baby spinach'], 
+          instructions: [
+            'Spread a thick layer of hummus over the center of the wrap.',
+            'Arrange your roasted vegetables (peppers, courgettes, and onions are best) over the hummus.',
+            'Top with a generous handful of baby spinach.',
+            'Fold in the sides and roll tightly; slice in half diagonally for easy eating.'
+          ],
+          description: createDesc(
+              "A simple way to hit daily **plant diversity goals**. The healthy monounsaturated fats and fiber provide steady, crash-free energy.",
+              "**Chickpeas** provide protein and fiber to **stabilize blood sugar**. A diverse array of antioxidants from Mediterranean veg helps neutralize free radicals produced during daily stress."
+          )
+        },
+        { 
+          title: 'Sardines & Bean Salad', benefit: 'Bone Health & Focus', 
+          ingredients: ['1 tin sardines in olive oil', '100g cannellini beans (rinsed)', '1/2 fresh lemon', '1 handful fresh parsley (chopped)'], 
+          instructions: [
+            'In a bowl, mix the cannellini beans with the chopped parsley and a squeeze of lemon.',
+            'Place the sardines on top of the bean mixture.',
+            'Use the oil from the sardine tin as a natural dressing—it is loaded with Vitamin D and Omega-3s.',
+            'Season with a tiny pinch of sea salt and cracked black pepper.'
+          ],
+          description: createDesc(
+              "A pantry-staple lunch packing a massive punch. Rich in **Calcium, Vitamin D, and Omega-3s** to support both skeleton and spirit.",
+              "**Sardines** are a rare natural source of **Vitamin D**, essential for modulating the immune response. **Cannellini beans** provide **resistant starch**, which ferments to produce anti-inflammatory **butyrate**."
+        )
+        },
+        { 
+          title: 'Turmeric Cauliflower Bowl', benefit: 'Low-Carb Cleanse', 
+          ingredients: ['150g cauliflower rice', '30g chopped raw walnuts', '2 tbsp fresh pomegranate seeds', '1 handful fresh spinach'], 
+          instructions: [
+            'Sauté the cauliflower rice in a pan with a little olive oil and 1/2 tsp turmeric for 5 minutes.',
+            'Stir in the baby spinach until it just begins to wilt.',
+            'Transfer to a serving bowl and top with the crunchy walnuts and pomegranate seeds.',
+            'A light, cleansing lunch that supports cellular detoxification.'
+          ],
+          description: createDesc(
+              "A light, cleansing lunch mimicking rice without the glycemic load. **Pomegranate seeds** add a burst of antioxidant sweetness.",
+              "**Cruciferous vegetables** like cauliflower contain **sulforaphane**, which activates the **Nrf2 pathway**—the most powerful internal antioxidant defense system. **Turmeric** adds additional systemic relief."
+          )
+        },
+        { 
+          title: 'Sweet Potato & Bean Soup', benefit: 'Heart Health', 
+          ingredients: ['1 medium sweet potato (diced)', '100g black beans (rinsed)', '400ml organic vegetable stock', '1/2 tsp cumin'], 
+          instructions: [
+            'Simmer the diced sweet potato in the stock with cumin for 15 minutes until tender.',
+            'Stir in the rinsed black beans and heat through for 2 minutes.',
+            'For a creamier texture, blend half of the soup and then mix it back with the whole beans.',
+            'This provides a fiber-rich, heart-healthy meal that keeps you full for hours.'
+          ],
+          description: createDesc(
+              "A fiber-rich soup that supports **cardiovascular health**. The warming spices add depth and provide essential digestive support.",
+              "**Black beans** are high in **soluble fiber**, which binds to inflammatory cholesterol. **Sweet potatoes** provide **potassium**, helping regulate fluid balance and counteract high sodium levels."
+          )
+        },
+        { 
+          title: 'Green Goddess Wrap', benefit: 'Lean Muscle & Joints', 
+          ingredients: ['1 spinach or wholemeal wrap', '100g poached chicken breast', '1/2 ripe avocado', '1 large handful fresh basil'], 
+          instructions: [
+            'Blend the avocado with the fresh basil and a teaspoon of olive oil to create a thick green dressing.',
+            'Shred the poached chicken breast and mix it thoroughly with the dressing.',
+            'Spoon the mixture into the wrap and roll tightly.',
+            'The high protein content supports muscle repair without the heavy inflammation of red meat.'
+          ],
+          description: createDesc(
+              "A satisfying, protein-heavy wrap utilizing fresh herbs for a natural boost. **Basil** is a surprisingly powerful inflammation fighter.",
+              "Basil contains **eugenol**, which works similarly to over-the-counter anti-inflammatories by inhibiting the **COX enzyme**. Lean protein supports muscle maintenance without the inflammation of red meat."
           )
         }
     ],
     dinner: [
         { 
           title: 'Baked Salmon & Sweet Potato', benefit: 'Heart & Skin Health', 
-          ingredients: ['1 wild-caught salmon fillet (approx 150g)', '1 medium sweet potato (cut into 2cm cubes)', '100g fresh broccoli florets', '1 tbsp extra virgin olive oil', '1/2 fresh lemon'], 
+          ingredients: ['1 salmon fillet (150g)', '1 medium sweet potato (cubed)', '100g fresh broccoli florets', '1/2 fresh lemon'], 
           instructions: [
-            'Preheat your oven to 200°C (400°F).',
-            'Toss the sweet potato cubes in half the olive oil and spread them on a baking tray. Roast for 10-12 minutes first.',
-            'Move the potatoes to one side of the tray and place the salmon fillet in the center.',
-            'Add the broccoli florets to the remaining space on the tray.',
-            'Drizzle the remaining oil over the salmon and broccoli, and squeeze the lemon over the fish.',
-            'Bake everything together for a further 12-15 minutes until the salmon flakes easily with a fork and the potatoes are tender.',
-            'Serve with a final sprinkle of dried oregano if desired.'
+            'Preheat oven to 200°C.',
+            'Toss sweet potato cubes in olive oil and bake for 10 minutes.',
+            'Add the salmon fillet and broccoli to the tray; drizzle with lemon and more oil.',
+            'Bake everything for a further 12-15 minutes until the salmon is flaky.',
+            'This provides a balanced hit of fats and fiber for evening repair.'
           ],
           description: createDesc(
-              "The ultimate anti-inflammatory dinner. This meal provides a perfect balance of **Omega-3 healthy fats**, **complex carbohydrates**, and **high-fiber greens** to ensure systemic repair while you sleep.",
-              "**Wild-caught salmon** provides long-chain **Omega-3s (EPA/DHA)**, which are the fundamental building blocks for anti-inflammatory signaling molecules. **Broccoli** provides **Vitamin C and sulforaphane**, ensuring your immune system and natural antioxidant defenses are supported."
+              "The ultimate anti-inflammatory dinner. A perfect balance of **Omega-3s**, **complex carbohydrates**, and **fiber** to ensure repair while you sleep.",
+              "**Wild-caught salmon** provides long-chain **EPA/DHA**, the building blocks for anti-inflammatory signaling. **Broccoli** provides **Vitamin C and sulforaphane** to support natural antioxidant defenses."
+          )
+        },
+        { 
+          title: 'Chickpea Sunshine Curry', benefit: 'Systemic Relief', 
+          ingredients: ['200g cooked chickpeas', '100ml light coconut milk', '1 tsp turmeric', '1 tsp fresh grated ginger', '2 large handfuls spinach'], 
+          instructions: [
+            'In a large pan, sauté the grated ginger and turmeric in a little oil for 1 minute.',
+            'Add the chickpeas and the coconut milk.',
+            'Simmer gently on low heat for 15 minutes to let the flavors meld.',
+            'Stir in the fresh spinach right at the end until just wilted; serve with brown rice.'
+          ],
+          description: createDesc(
+              "A mild, fragrant curry filling your kitchen with healing aromas. Spices work together to **lower systemic inflammation**.",
+              "The combination of **turmeric and ginger** creates a 'synergistic effect', where active compounds enhance each other. **Chickpeas** provide slow-release carbs for steady evening energy."
+          )
+        },
+        { 
+          title: 'Turkey & Ginger Stir-fry', benefit: 'Lean Muscle & Pain Relief', 
+          ingredients: ['150g turkey strips', '100g mixed stir-fry vegetables', '2.5cm fresh ginger matchsticks', '1 clove minced garlic'], 
+          instructions: [
+            'Heat a wok with a teaspoon of avocado oil.',
+            'Stir-fry the turkey strips with garlic and ginger until fully cooked through.',
+            'Add the mixed vegetables and toss for 4 minutes until they are tender-crisp.',
+            'Add a tablespoon of tamari for a non-inflammatory salty finish.'
+          ],
+          description: createDesc(
+              "High-protein dinner utilizing large amounts of **fresh ginger** to target **joint and muscle pain**. Lean turkey is an excellent source of **zinc**.",
+              "Ginger acts as a natural pain reliever by **suppressing leukotrienes**—inflammatory molecules causing swelling. **Tamari** is used to avoid common grain-based inflammatory triggers."
+          )
+        },
+        { 
+          title: 'Cod with Garlic & Parsley', benefit: 'Gentle Digestion', 
+          ingredients: ['150g fresh cod fillet', '1 large clove garlic (minced)', '1 tbsp chopped fresh parsley', '100g boiled baby potatoes'], 
+          instructions: [
+            'Place the cod on a large piece of foil.',
+            'Top the fish with the minced garlic, parsley, lemon slices, and a drizzle of olive oil.',
+            'Wrap the foil into a parcel and bake for 15 minutes at 180°C.',
+            'Serve with the baby potatoes for a light, easy-to-digest evening meal.'
+          ],
+          description: createDesc(
+              "A light evening meal easy on the digestive system. **Garlic and parsley** provide a potent antimicrobial and anti-inflammatory punch.",
+              "**Garlic** contains **allicin**, which supports the immune system. **Parsley** is highly **alkalizing** and rich in **Vitamin K**, which is essential for bone density and blood integrity."
+          )
+        },
+        { 
+          title: 'Turmeric Lemon Chicken', benefit: 'Post-Workout Healing', 
+          ingredients: ['150g chicken breast (chopped)', '1/2 fresh lemon', '1 tsp ground turmeric', '1 medium courgette (sliced)'], 
+          instructions: [
+            'Marinate the chicken pieces in the lemon juice and turmeric for 15 minutes.',
+            'Roast the chicken and courgette slices on a baking tray at 200°C for 25 minutes.',
+            'The lemon and turmeric work together to speed up the repair of exercised muscles.'
+          ],
+          description: createDesc(
+              "A simple, clean meal focusing on **repairing tissues** after physical activity. Lemon juice helps soften protein for easier digestion.",
+              "**Vitamin C** from lemon assists in **collagen synthesis**, aiding the repair of tendons. **Turmeric** targets the systemic inflammation that builds up after heavy exercise."
+          )
+        },
+        { 
+          title: 'Walnut & Lentil Bolognese', benefit: 'Cellular Renewal', 
+          ingredients: ['100g cooked brown lentils', '50g crushed walnuts', '200g organic crushed tomatoes', '1 medium courgette'], 
+          instructions: [
+            'In a pan, sauté minced garlic and add the cooked lentils and walnuts.',
+            'Pour in the crushed tomatoes and simmer for 15 minutes to allow the sauce to thicken.',
+            'Spiralise the courgette into noodles and serve the hot sauce over the raw "zoodles".'
+          ],
+          description: createDesc(
+              "A plant-based classic. **Walnuts and lentils** provide rich texture and a massive dose of **plant protein and healthy fats**.",
+              "**Lentils** are high in **folate**, essential for DNA synthesis and repair. **Lycopene** in tomatoes becomes more bioavailable when cooked, shielding against oxidative stress."
+          )
+        },
+        { 
+          title: 'Miso Glazed Black Cod', benefit: 'Deep Hydration', 
+          ingredients: ['150g cod fillet', '1 tbsp organic miso paste', '1 tsp fresh ginger (grated)', '100g steamed bok choy'], 
+          instructions: [
+            'Mix the miso paste and ginger with a tiny splash of water.',
+            'Spread the mixture over the cod fillet and bake for 15 minutes at 200°C.',
+            'Steam the bok choy separately for 3 minutes and serve on the side.'
+          ],
+          description: createDesc(
+              "A sophisticated dinner bringing **fermented goodness** to your plate. **Miso** is a great way to support gut health in the evening.",
+              "Miso provides **live probiotics** for a healthy microbiome. **Bok choy** belongs to the cruciferous family, providing **glucosinolates** that support your natural antioxidant systems."
+          )
+        },
+        { 
+          title: 'Anti-Inflammatory Veggie Stew', benefit: 'Microbiome Diversity', 
+          ingredients: ['1/2 aubergine (cubed)', '200g crushed tomatoes', '100g cooked chickpeas', '1 tbsp extra virgin olive oil'], 
+          instructions: [
+            'Sauté the aubergine cubes and minced garlic in olive oil until the aubergine is very soft.',
+            'Add the tomatoes and chickpeas and bring to a gentle simmer.',
+            'Cover and cook for 20 minutes on the lowest setting until the stew is rich and thick.'
+          ],
+          description: createDesc(
+              "A hearty stew allowing flavors to meld. Rich in **fiber** and diverse plant compounds that feed the immune system.",
+              "**Aubergine** contains **nasunin**, a potent antioxidant in the purple skin that protects cell membranes. Slow cooking makes the **fiber** very easy for the gut to handle."
           )
         }
     ],
     perimenopause: [
       { 
         title: 'Maca & Berry Smoothie', benefit: 'Hot Flush Relief', 
-        ingredients: ['1 tbsp raw maca powder', '75g frozen organic blueberries', '1/2 medium cucumber (peeled)', '1 tbsp ground flaxseeds', '240ml chilled unsweetened almond milk'], 
+        ingredients: ['1 tbsp raw maca powder', '75g frozen blueberries', '1/2 medium cucumber (peeled)', '1 tbsp ground flaxseeds', '240ml chilled almond milk'], 
         instructions: [
-          'Peel the cucumber to remove the tougher outer skin, then roughly chop.',
-          'Combine the cucumber, blueberries, maca powder, and flaxseeds in the blender.',
-          'Add the chilled almond milk.',
-          'Blend on high for 60 seconds until completely smooth.',
-          'The cucumber provides a unique "cooling" thermal effect, while the maca supports the endocrine system during transitions.'
+          'Combine the blueberries, peeled cucumber, maca, and flaxseeds in a blender.',
+          'Pour in the almond milk.',
+          'Blend on high for 60 seconds; the cucumber provides an immediate cooling thermal effect.'
         ],
         description: createDesc(
-            "A cooling, grounding smoothie designed to **stabilize energy levels** and ease the transition through hormonal shifts. It targets the 'internal heat' often felt during perimenopause.",
-            "**Maca** is a powerful **adaptogen** that supports the endocrine system and may help balance fluctuating estrogen levels. **Cucumber** provides deep cellular hydration and acts as a **natural cooling agent** to counter systemic heat and flushes."
+            "A cooling smoothie designed to **stabilize energy levels** and ease hormonal shifts. It targets the 'internal heat' felt during perimenopause.",
+            "**Maca** is a powerful **adaptogen** that supports the endocrine system. **Cucumber** provides deep cellular hydration and acts as a **natural cooling agent** to counter hot flushes."
+        )
+      },
+      { 
+        title: 'Phytoestrogen Salad', benefit: 'Oestrogen Balancing', 
+        ingredients: ['100g steamed edamame beans', '1 large handful mixed greens', '30g pumpkin seeds', '1/2 ripe avocado', 'Tahini dressing'], 
+        instructions: [
+          'Steam the edamame beans until tender (about 4 minutes).',
+          'Toss the beans with the mixed greens and seeds in a large bowl.',
+          'Top with sliced avocado and a generous drizzle of tahini dressing for balanced hormones.'
+        ],
+        description: createDesc(
+            "A nutrient-rich salad providing **plant-based estrogens** to gently support hormonal harmony during transitions.",
+            "**Edamame** contains **isoflavones**, a type of phytoestrogen that can modulate the effects of estrogen in the body, smoothing out hormonal fluctuations."
+        )
+      },
+      { 
+        title: 'Tofu & Broccoli Stir-Fry', benefit: 'Bone Density', 
+        ingredients: ['150g firm organic tofu (cubed)', '100g fresh broccoli florets', '1 tbsp sesame oil', '1 tsp grated ginger', '1 tbsp tamari'], 
+        instructions: [
+          'Pan-fry the tofu cubes in sesame oil until they are golden on all sides.',
+          'Add the ginger and broccoli, stir-frying for 4 minutes with a splash of water.',
+          'Add the tamari at the very end to avoid burning the sauce.'
+        ],
+        description: createDesc(
+            "Focus on bone-strengthening **minerals** and **plant protein**. This meal is essential as natural estrogen levels decline.",
+            "**Tofu** is a rich source of **calcium and phytoestrogens**. **Broccoli** provides **Vitamin K**, which is essential for maintaining bone mineral density."
+        )
+      },
+      { 
+        title: 'Sage & Pumpkin Seed Chicken', benefit: 'Night Sweat Reduction', 
+        ingredients: ['150g chicken breast', '1 tbsp fresh sage (finely chopped)', '30g crushed pumpkin seeds', '1 tbsp extra virgin olive oil'], 
+        instructions: [
+          'Coat the chicken breast in olive oil, then press the chopped sage and crushed pumpkin seeds onto the meat.',
+          'Bake at 200°C for 25 minutes until cooked through and the seeds are toasted.',
+          'Sage is a traditional remedy for reducing the intensity of hot flushes and sweats.'
+        ],
+        description: createDesc(
+            "A grounding dinner utilizing the properties of **sage**. It is specifically targeted at temperature regulation.",
+            "**Sage** has been used traditionally for centuries to manage **excessive sweating**. **Pumpkin seeds** provide **magnesium**, which calms the nervous system for better rest."
         )
       }
     ],
     endometriosis: [
       { 
         title: 'Turmeric Ginger Broth', benefit: 'Pelvic Relief', 
-        ingredients: ['400ml low-sodium organic bone broth (or rich vegetable stock)', '1 tbsp fresh ginger (sliced into thin rounds)', '1 tsp ground turmeric', '1 large clove garlic (crushed)', '1 large handful fresh baby spinach'], 
+        ingredients: ['400ml low-sodium bone broth', '1 tbsp fresh ginger (sliced)', '1 tsp ground turmeric', '1 large clove garlic (crushed)', '1 handful fresh baby spinach'], 
         instructions: [
-          'Pour the bone broth or stock into a small saucepan.',
-          'Add the sliced ginger, turmeric, and the crushed garlic clove.',
-          'Bring to a very gentle simmer—do not let it boil vigorously or you will destroy delicate nutrients.',
-          'Simmer for 10-15 minutes to allow the active anti-inflammatory compounds to infuse into the liquid.',
-          'Stir in the fresh spinach right at the end until it just wilts.',
-          'Remove the larger pieces of ginger if you prefer, then pour into a large mug and sip slowly.'
+          'Simmer the broth with the ginger, turmeric, and garlic for 15 minutes on a low heat.',
+          'Do not let the broth boil hard, as this can degrade the anti-inflammatory enzymes.',
+          'Stir in the fresh spinach just before serving; sip while warm for pelvic comfort.'
         ],
         description: createDesc(
-            "Liquid medicine for the body. This broth focuses on flooding the **pelvic area** with warmth and potent **anti-pain nutrients** to help manage cyclic discomfort naturally.",
-            "The combination of high-dose **ginger** and **turmeric** specifically targets **prostaglandin production**—the chemical messengers in the body responsible for triggering pelvic pain and uterine contractions."
+            "Liquid medicine for the body. Floods the **pelvic area** with warmth and potent **anti-pain nutrients** to manage discomfort naturally.",
+            "The combination of high-dose **ginger and turmeric** specifically targets **prostaglandin production**—the chemical messengers responsible for triggering pelvic pain."
+        )
+      },
+      { 
+        title: 'Omega-3 Sardine Smash', benefit: 'Pain Management', 
+        ingredients: ['1 tin sardines in olive oil', '1/2 large avocado', '1 slice toasted sourdough', 'Squeeze of fresh lemon'], 
+        instructions: [
+          'In a small bowl, mash the sardines and avocado together with a fork.',
+          'Add the lemon juice and spread the mixture thickly over the warm sourdough toast.',
+          'The extreme density of Omega-3s targets the pathways that create pelvic pain.'
+        ],
+        description: createDesc(
+            "A high-impact meal for pain management. The sheer density of **Omega-3s** is designed to actively block pain pathways.",
+            "**Sardines** provide an extremely high **Omega-3 to Omega-6 ratio**, which is critical for lowering the overall inflammatory load in the reproductive system."
+        )
+      },
+      { 
+        title: 'Warm Lentil Detox', benefit: 'Excess Oestrogen Removal', 
+        ingredients: ['100g cooked green lentils', '1 medium roasted beetroot (cubed)', '1 handful rocket', 'Dressing: Apple Cider Vinegar'], 
+        instructions: [
+          'Gently warm the cooked lentils in a pan.',
+          'Mix with the roasted beetroot cubes and fresh rocket leaves.',
+          'Dress with 1 tbsp of apple cider vinegar to support hormone clearance via the liver and gut.'
+        ],
+        description: createDesc(
+            "Fiber is key for managing endometriosis. This meal supports the **liver and gut** in removing excess hormones.",
+            "Excess estrogen can drive tissue growth. The **fiber** in lentils and **betalains** in beetroot support the body's natural elimination pathways to maintain balance."
+        )
+      },
+      { 
+        title: 'Wild Salmon & Asparagus', benefit: 'Anti-Bloating', 
+        ingredients: ['1 wild salmon fillet', '100g fresh asparagus spears', '1 tbsp extra virgin olive oil', '1/2 fresh lemon'], 
+        instructions: [
+          'Place the salmon and asparagus on a baking tray.',
+          'Drizzle with olive oil and bake for 15 minutes at 180°C.',
+          'The asparagus acts as a natural diuretic to help ease the "endo belly" bloating.'
+        ],
+        description: createDesc(
+            "A clean meal targeting **'endo belly' bloating** and providing essential fats needed for **cellular repair** and tissue health.",
+            "**Asparagus** contains **asparagine**, an amino acid acting as a natural diuretic to help shed excess fluid. **Salmon** provides the **Omega-3s** needed to reduce internal scarring."
         )
       }
     ],
     hormones: [
       { 
         title: 'Seed Cycling Smoothie', benefit: 'Cycle Phase Support', 
-        ingredients: ['1 tbsp seed cycling blend (Flax/Pumpkin for Phase 1, Sesame/Sunflower for Phase 2)', '1/2 medium ripe banana', '1 large handful fresh spinach', '240ml unsweetened oat milk'], 
+        ingredients: ['1 tbsp seed blend (Flax/Pumpkin OR Sesame/Sunflower)', '1/2 small ripe banana', '1 handful fresh spinach', '240ml unsweetened oat milk'], 
         instructions: [
-          'Choose the correct seeds based on your current menstrual phase (Follicular vs Luteal).',
-          'Add the seeds, banana, and spinach to the blender.',
-          'Pour in the oat milk—it provides a gentle, low-inflammatory base.',
-          'Blend on high speed for 60 seconds until the seeds are completely pulverized and the texture is silky.',
-          'Drink daily to provide your body with the specific minerals needed for hormone clearance.'
+          'Select your seed blend based on your cycle phase.',
+          'Combine all ingredients in a blender and blend on high for 60 seconds.',
+          'Consuming these specific minerals daily supports the regular clearance of hormones.'
         ],
         description: createDesc(
-            "A rhythmic approach to nutrition. By **rotating your seed intake** with your cycle, you provide the specific minerals and lignans your body needs most at different times of the month.",
-            "**Flax and pumpkin seeds** provide zinc and lignans for the **follicular phase**, while **sesame and sunflower seeds** provide Vitamin E and selenium for the **luteal phase**, supporting optimal hormone clearance and progesterone production."
+            "A rhythmic approach to nutrition. By **rotating seed intake** with your cycle, you provide the minerals your body needs most each month.",
+            "**Flax and pumpkin seeds** provide zinc and lignans for the **follicular phase**, while **sesame and sunflower seeds** provide Vitamin E for the **luteal phase**."
+        )
+      },
+      { 
+        title: 'Cruciferous Crunch', benefit: 'Oestrogen Detox', 
+        ingredients: ['100g fresh kale (shredded)', '50g red cabbage (shredded)', '30g raw walnuts', 'Lemon and olive oil dressing'], 
+        instructions: [
+          'Massage the kale and cabbage with the lemon and oil dressing for 3 minutes to soften the fiber.',
+          'Top with raw walnuts for healthy fats.',
+          'Cruciferous vegetables are essential for the liver to process estrogen correctly.'
+        ],
+        description: createDesc(
+            "Raw cruciferous vegetables require 'massage' to release benefits. This salad is a masterclass in **hormonal detoxification**.",
+            "Cruciferous vegetables contain **Indole-3-Carbinol (I3C)**, which converts to **DIM**. DIM helps the liver metabolize estrogen into its most beneficial, non-inflammatory forms."
+        )
+      },
+      { 
+        title: 'Walnut Crusted Cod', benefit: 'Omega 3/6 Ratio', 
+        ingredients: ['150g fresh cod fillet', '1 tbsp raw hemp hearts', '1 tbsp finely crushed walnuts', '1 tsp Dijon mustard'], 
+        instructions: [
+          'Spread a thin layer of mustard over the top of the cod fillet.',
+          'Press the hemp and walnut mixture onto the mustard to create a crust.',
+          'Bake for 15 minutes at 180°C until the fish flakes easily.'
+        ],
+        description: createDesc(
+            "A sophisticated dinner ensuring a **balanced ratio** of essential fatty acids to support brain and hormone health.",
+            "**Cod** is a very lean, low-toxin protein. The **walnut and hemp crust** provides plant-based fats that act as vital precursors to hormone production."
+        )
+      },
+      { 
+        title: 'Sweet Potato Balancer', benefit: 'Progesterone Support', 
+        ingredients: ['1 medium sweet potato', '2 tbsp organic tahini', '1 tsp ground cinnamon', '1 handful fresh steamed spinach'], 
+        instructions: [
+          'Bake the sweet potato whole until very soft (about 45 minutes).',
+          'Split open and fill with the steamed spinach.',
+          'Drizzle with the tahini and a sprinkle of cinnamon for blood sugar balance and progesterone support.'
+        ],
+        description: createDesc(
+            "A grounding meal beneficial in the second half of your cycle to support **blood sugar** and **progesterone production**.",
+            "The **complex carbohydrates** in sweet potato prevent blood sugar dips that cause mood swings, while the **healthy fats** in tahini support progesterone levels."
         )
       }
     ]
@@ -461,10 +793,11 @@ const App = () => {
     }
   };
 
-  // Auto-scroll to top on navigation
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [activeTab, selectedRecipe]);
+
+  const activeCategoryData = allCategories.find(c => c.id === activeTab);
 
   return (
     <div className="min-h-screen relative font-body text-[#1a1a1a] overflow-x-hidden selection:bg-[#f28d35]/30 flex flex-col">
