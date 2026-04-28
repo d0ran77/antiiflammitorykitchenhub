@@ -16,8 +16,23 @@ import {
   Activity,
   Copy,
   Check,
-  Home
+  Home,
+  Pill,
+  AlertTriangle,
+  Clock,
+  ShieldCheck,
+  Star,
+  Search,
+  BookOpen
 } from 'lucide-react';
+
+// --- DECORATIVE COMPONENTS ---
+const BotanicalIcon = () => (
+  <svg className="absolute top-0 right-0 w-32 h-32 text-white/5 pointer-events-none transform translate-x-8 -translate-y-8 rotate-12" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M50 10c-5 10-15 15-25 15s-10 15-5 25c5 10 15 5 25 5s20 15 25 5c5-10 0-25-5-25s-10-5-15-25z" opacity="0.5" />
+    <path d="M70 40c-10 0-15 10-25 10s-10 15-10 25c0 10 15 10 25 10s15-10 20-25c5-15-5-20-10-20z" opacity="0.3" />
+  </svg>
+);
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -25,55 +40,56 @@ const App = () => {
   const [copiedId, setCopiedId] = useState(null);
   const scrollContainerRef = useRef(null);
 
-  // --- SEO & SCHEMA ENGINE ---
+  // --- SEO & SOCIAL SHARING ENGINE ---
   useEffect(() => {
+    const siteTitle = "The Kitchen Hub | Eat to Heal";
+    const defaultImage = "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&h=630&fit=crop";
+    const defaultDesc = "Deep-dive functional nutrition protocols designed to target systemic inflammation and chronic pain.";
+
     if (selectedRecipe) {
-      document.title = `${selectedRecipe.title} | Anti-Inflammatory Kitchen Hub`;
-      updateMetaDescription(`Learn how to make ${selectedRecipe.title}. ${selectedRecipe.benefit}. High-protein, anti-inflammatory recipe.`);
+      const title = `${selectedRecipe.title} | Scientific Profile`;
+      updateMetaTags(title, selectedRecipe.benefit, defaultImage);
       injectRecipeSchema(selectedRecipe);
     } else if (activeTab === 'home') {
-      document.title = "Anti-Inflammatory Kitchen Hub | Eat to Heal";
-      updateMetaDescription("Harness the power of natural ingredients to boost immunity, reduce systemic pain, and reclaim your daily vitality with our functional recipe collections.");
+      updateMetaTags(siteTitle, defaultDesc, defaultImage);
       removeSchema();
     } else {
-      const categoryName = allCategories.find(c => c.id === activeTab)?.name || activeTab;
-      document.title = `${categoryName} Recipes | Anti-Inflammatory Kitchen Hub`;
-      updateMetaDescription(`Explore our collection of ${categoryName} recipes designed to reduce inflammation and support natural recovery.`);
+      const category = allCategories.find(c => c.id === activeTab);
+      updateMetaTags(`${category?.name || activeTab} | The Kitchen Hub`, defaultDesc, category?.image || defaultImage);
       removeSchema();
     }
   }, [activeTab, selectedRecipe]);
 
-  const updateMetaDescription = (text) => {
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.name = "description";
-      document.getElementsByTagName('head')[0].appendChild(meta);
-    }
-    meta.setAttribute('content', text);
+  const updateMetaTags = (title, desc, image) => {
+    document.title = title;
+    const setMeta = (attr, value, isProperty = false) => {
+      const selector = isProperty ? `meta[property="${attr}"]` : `meta[name="${attr}"]`;
+      let el = document.querySelector(selector);
+      if (!el) {
+        el = document.createElement('meta');
+        if (isProperty) el.setAttribute('property', attr); else el.name = attr;
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', value);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:image', image, true);
   };
 
-  const injectRecipeSchema = (recipe) => {
+  const injectRecipeSchema = (item) => {
     removeSchema();
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.id = 'recipe-schema';
-    const schemaData = {
+    script.innerHTML = JSON.stringify({
       "@context": "https://schema.org/",
-      "@type": "Recipe",
-      "name": recipe.title,
-      "image": [mainCategories.find(c => c.id === activeTab)?.image || ""],
-      "author": { "@type": "Organization", "name": "The Kitchen Hub" },
-      "description": recipe.benefit,
-      "recipeIngredient": recipe.ingredients,
-      "recipeInstructions": recipe.instructions.map((step, index) => ({
-        "@type": "HowToStep",
-        "text": step,
-        "position": index + 1
-      })),
-      "suitableForDiet": "https://schema.org/GlutenFreeDiet"
-    };
-    script.innerHTML = JSON.stringify(schemaData);
+      "@type": activeTab === 'supplements' ? "Thing" : "Recipe",
+      "name": item.title,
+      "description": item.benefit,
+      "author": { "@type": "Organization", "name": "The Kitchen Hub" }
+    });
     document.head.appendChild(script);
   };
 
@@ -84,26 +100,28 @@ const App = () => {
 
   // --- DATA CATEGORIES ---
   const mainCategories = [
-    { id: 'smoothies', name: 'Drinks', icon: <Droplets className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=800&h=1200' },
-    { id: 'breakfast', name: 'Breakfast', icon: <Coffee className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=800&h=1200' },
-    { id: 'lunch', name: 'Lunch', icon: <Sun className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800&h=1200' },
-    { id: 'dinner', name: 'Dinner', icon: <Moon className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800&h=1200' }
+    { id: 'smoothies', name: 'Drinks', icon: <Droplets className="w-6 h-6" />, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'breakfast', name: 'Breakfast', icon: <Coffee className="w-6 h-6" />, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'lunch', name: 'Lunch', icon: <Sun className="w-6 h-6" />, image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'dinner', name: 'Dinner', icon: <Moon className="w-6 h-6" />, image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800&h=1200' }
   ];
 
   const specialCategories = [
-    { id: 'perimenopause', name: 'Perimenopause', icon: <Activity className="w-5 h-5" /> },
-    { id: 'endometriosis', name: 'Endometriosis', icon: <Activity className="w-5 h-5" /> },
-    { id: 'hormones', name: 'Hormones', icon: <Activity className="w-5 h-5" /> }
+    { id: 'perimenopause', name: 'Perimenopause', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'endometriosis', name: 'Endometriosis', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'hormones', name: 'Hormones', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'supplements', name: 'Supplements', icon: <Pill className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800&h=1200' }
   ];
 
   const allCategories = [...mainCategories, ...specialCategories];
 
   const masterIngredientsData = [
-    { title: "🍎 Fruits & Berries", items: ['Blueberries & Raspberries', 'Avocado', 'Lemon', 'Papaya', 'Pineapple', 'Tart Cherries'] },
-    { title: "🥦 Vegetables & Greens", items: ['Spinach, Rocket, Baby Kale', 'Beetroot', 'Sweet Potato', 'Broccoli, Asparagus', 'Mixed Med Veg', 'Garlic', 'Ginger'] },
-    { title: "🐟 Proteins", items: ['Salmon & Mackerel', 'Cod / White Fish', 'Turkey Breast', 'Free-range Eggs', 'Firm Tofu'] },
-    { title: "🫘 Pantry Staples", items: ['Jumbo Rolled Oats', 'Quinoa', 'Red Split Lentils', 'Chickpeas', 'Sourdough or Rye'] },
-    { title: "🌿 Boosters & Oils", items: ['Turmeric & Black Pepper', 'Chia & Flaxseeds', 'Hemp Hearts', 'Walnuts', 'Extra Virgin Olive Oil', 'Aloe Vera Juice'] }
+    { title: "🍎 Fruits & Berries", items: ['Organic Blueberries', 'Raspberries', 'Ripe Avocado', 'Fresh Lemon', 'Fresh Lime', 'Ripe Papaya', 'Frozen Pineapple', 'Tart Montmorency Cherries'] },
+    { title: "🥦 Vegetables & Greens", items: ['Baby Spinach', 'Wild Rocket', 'Tuscan Kale', 'Raw Beetroot', 'Orange Sweet Potato', 'Broccoli Florets', 'Asparagus Spears', 'Garlic', 'Fresh Ginger Root'] },
+    { title: "🐟 Proteins", items: ['Wild-caught Salmon', 'Mackerel (in Olive Oil)', 'White Cod Fillets', 'Organic Turkey Breast', 'Free-range Eggs', 'Firm Sprouted Tofu'] },
+    { title: "🫘 Pantry Staples", items: ['Jumbo Organic Rolled Oats', 'Quinoa (Red/White)', 'Red Split Lentils', 'Cooked Chickpeas', 'Sourdough', 'Dark Rye Bread'] },
+    { title: "🌿 Boosters & Oils", items: ['Curcumin 95%', 'Organic Black Pepper', 'Chia Seeds', 'Ground Flaxseeds', 'Raw Hemp Hearts', 'Raw Walnut Halves', 'Extra Virgin Olive Oil', 'Aloe Vera Juice'] },
+    { title: "💊 Functional Supplements", items: ['95% Curcuminoids (with Piperine)', 'EPA/DHA Distilled Fish Oil', 'Magnesium Glycinate (Chelated)', 'Boswellia Serrata Extract (65% Acids)'] }
   ];
 
   const createDesc = (why, science) => `### Why Your Body Loves This\n${why}\n\n### The Nutritional Science\n${science}`;
@@ -111,635 +129,138 @@ const App = () => {
   const data = {
     smoothies: [
       { 
-        title: 'Golden Glow', benefit: 'Immunity & Systemic Inflammation', icon: <Zap />, 
-        ingredients: ['75g frozen pineapple chunks', '75g frozen mango chunks', '1 large handful fresh baby spinach', '1.5cm fresh ginger (peeled and grated)', '1/2 tsp ground turmeric', '1 tbsp black chia seeds', '240ml chilled coconut water'], 
-        instructions: [
-          'Peel the fresh ginger using the edge of a spoon to scrape the skin off, then grate it finely into a paste.',
-          'Place the baby spinach at the bottom of the blender, followed by the frozen fruit and the spices.',
-          'Pour in the chilled coconut water, ensuring it covers at least half of the fruit.',
-          'Blend on high speed for 45-60 seconds until the chia seeds are broken down and the texture is electric green and smooth.',
-          'Serve immediately in a glass to maintain maximum antioxidant potency.'
-        ],
+        title: 'Golden Glow', time: '5 mins', tag: 'Immunity', benefit: 'NF-kB Molecule Inhibition', icon: <Zap />, 
+        ingredients: ['75g frozen pineapple chunks', '75g frozen mango chunks', '1 large handful fresh baby spinach', '1.5cm fresh ginger (peeled)', '1/2 tsp ground turmeric', '1 tbsp black chia seeds', '240ml chilled coconut water'], 
+        instructions: ['Peel and grate ginger into a fine paste.', 'Place spinach and frozen fruit in blender.', 'Add turmeric, chia seeds, and pour in coconut water.', 'Blend on high for 60 seconds until seeds are fully broken down.', 'Serve immediately to retain maximal enzymatic activity.'],
         description: createDesc(
-          "This vibrant blend acts as a powerful morning reset. The **natural bromelain** found in pineapple helps your body **digest proteins** more effectively and significantly **reduces internal swelling**. The **Vitamin C** from mango and spinach provides an antioxidant-rich energy lift that protects your cells from daily oxidative stress.",
+          "This vibrant blend acts as a powerful morning reset. The **natural bromelain** found in pineapple helps your body **digest proteins** more effectively and significantly **reduces internal swelling** that causes joint stiffness. The **Vitamin C** from mango and spinach provides a powerful antioxidant-rich lift.",
           "**Turmeric** contains its most active compound, **curcumin**, which is scientifically proven to inhibit the **NF-kB molecule**—a protein complex that travels into the nuclei of your cells and turns on genes related to chronic inflammation. When paired with **fresh ginger**, this creates a dual-action pathway to **suppress pro-inflammatory cytokines**."
         )
       },
       { 
-        title: 'Soothing Relief', benefit: 'Joint Pain & Sensitive Stomach', icon: <Info />, 
-        ingredients: ['75g ripe papaya (cubed)', '75g frozen strawberries', '2.5cm fresh ginger root', '60ml plain unsweetened kefir or coconut yogurt', '1 tbsp raw hemp hearts', '180ml pure aloe vera juice (food grade)'], 
-        instructions: [
-          'Remove the seeds from the papaya and cube the flesh into small pieces.',
-          'Grate the fresh ginger root finely; the juice of the ginger is just as important as the pulp.',
-          'Add all solid ingredients to the blender, then pour in the liquid kefir and aloe vera juice.',
-          'Blend on high speed until the hemp hearts are completely pulverized into the cream.',
-          'Sip slowly to allow the aloe and ginger to coat and soothe the digestive tract.'
-        ],
+        title: 'Soothing Relief', time: '5 mins', tag: 'Digestion', benefit: 'Joint & Gut Mucosal Healing', icon: <Info />, 
+        ingredients: ['75g ripe papaya', '75g frozen strawberries', '2.5cm fresh ginger root', '60ml plain kefir', '1 tbsp hemp hearts', '180ml food-grade aloe vera juice'], 
+        instructions: ['Remove papaya seeds and cube the flesh.', 'Grate ginger root finely to release active oils.', 'Combine all ingredients in the blender jar.', 'Blend on high speed until completely smooth.', 'Drink slowly to allow the aloe to coat the digestive tract.'],
         description: createDesc(
-          "Specifically designed for those with **sensitive digestive systems** or **joint stiffness**, this smoothie uses **aloe vera** and **papaya** to coat and protect the stomach lining. The **strawberries** provide a dense hit of antioxidants that help reduce the heat of systemic inflammation throughout the body.",
-          "**Papaya** contains **papain**, a proteolytic enzyme that assists in protein breakdown and actively reduces gut-based inflammation. **Aloe vera juice** adds a layer of **soothing mucilage**, which has been clinically shown to support **mucosal healing** throughout the digestive tract while the **gingerol** in ginger blocks pain signaling."
+          "Specifically designed for those with **sensitive digestive systems**, this smoothie uses **aloe vera** and **papaya** to coat and protect the stomach lining while delivering anti-pain nutrients to the joints. The **probiotics** in kefir support the gut-brain axis, vital for pain perception.",
+          "**Papaya** contains **papain**, a proteolytic enzyme that assists in protein breakdown and reduces gut inflammation. **Aloe vera juice** adds a layer of **soothing mucilage**, which supports **mucosal healing** throughout the digestive tract while ginger blocks pain signaling by inhibiting **leukotriene production**."
         )
       },
       { 
-        title: 'Radiant Skin Elixir', benefit: 'Collagen & Skin Elasticity', icon: <Sparkles />, 
-        ingredients: ['75g mixed organic berries', '1/4 ripe avocado', '1 handful fresh spinach', '1 tbsp ground flaxseeds', '1/2 tsp ground cinnamon', '240ml high-quality green tea (brewed and chilled)'], 
-        instructions: [
-          'Brew your green tea 30 minutes in advance and let it chill in the fridge or freezer.',
-          'Scoop the avocado flesh directly into the blender—its fats are required to absorb the Vitamin K in the spinach.',
-          'Add the berries, spinach, ground flax, and cinnamon.',
-          'Pour the chilled tea over the mixture and blend on high for 60 seconds.',
-          'The result should be a silky, deep-purple blend that is rich in skin-protecting lipids.'
-        ],
+        title: 'Radiant Elixir', time: '8 mins', tag: 'Beauty', benefit: 'Collagen Structure Protection', icon: <Sparkles />, 
+        ingredients: ['75g mixed organic berries', '1/4 ripe avocado', '1 handful spinach', '1 tbsp ground flaxseeds', '1/2 tsp cinnamon', '240ml chilled green tea'], 
+        instructions: ['Brew high-quality green tea in advance and chill.', 'Scoop avocado flesh directly into the blender.', 'Add berries, spinach, flax, and cinnamon.', 'Blend on high for 45 seconds until silky.'],
         description: createDesc(
-          "This is a beauty-focused blend that works from the inside out. The **healthy monounsaturated fats** from **avocado** and **Omega-3s** from **flaxseeds** help maintain the skin's **lipid barrier**, effectively reducing redness and preventing the chronic dryness that leads to premature aging.",
-          "**Mixed berries** are packed with **anthocyanins**, which act as biological bodyguards, protecting your **collagen structures** from oxidative damage. **Green tea** provides **EGCG** (epigallocatechin gallate), a unique catechin that neutralizes the free radicals responsible for inflammatory breakouts and cellular degradation."
+          "Healthy **monounsaturated fats** from avocado and **Omega-3s** from flax maintain the skin's **lipid barrier**, reducing redness and chronic dryness that leads to premature aging.",
+          "**Mixed berries** are packed with **anthocyanins**, which protect your **collagen structures** from oxidative damage. **Green tea** provides **EGCG**, neutralizing free radicals responsible for inflammatory breakouts and cellular degradation."
         )
       },
       { 
-        title: 'Deep Sleep Dreamer', benefit: 'Nervous System & Rest', icon: <Moon />, 
-        ingredients: ['75g frozen tart cherries (Montmorency)', '1/2 small ripe banana', '30g raw walnut halves', '1 tbsp unsweetened almond butter', '1 tiny dash ground cinnamon', '240ml chamomile tea (brewed and cooled)'], 
-        instructions: [
-          'Prepare your chamomile tea by steeping two bags in one cup of hot water, then allow it to reach room temperature.',
-          'Combine the frozen tart cherries, banana, and walnuts in the blender.',
-          'Add the almond butter and a pinch of cinnamon for blood sugar stability.',
-          'Pour in the chamomile tea and blend until the walnuts are no longer grainy.',
-          'Enjoy 1 hour before sleep to signal your body to produce natural melatonin.'
-        ],
+        title: 'Deep Sleep Dreamer', time: '10 mins', tag: 'Rest', benefit: 'HPA-Axis Stabilization', icon: <Moon />, 
+        ingredients: ['75g tart cherries', '1/2 small banana', '30g raw walnut halves', '1 tbsp almond butter', 'Dash of cinnamon', '240ml chamomile tea'], 
+        instructions: ['Brew chamomile tea and allow it to cool completely.', 'Combine cherries, banana, walnuts, and almond butter.', 'Pour in tea and blend until the walnuts are no longer grainy.', 'Drink 1-2 hours before bed for restorative sleep.'],
         description: createDesc(
-          "A functional evening treat designed to switch your nervous system from 'fight-or-flight' to **'rest-and-digest'**. The combination of **magnesium** and **healthy fats** creates a steady blood sugar environment, making it easier for your brain to initiate a deep, restorative sleep cycle.",
-          "**Tart cherries** are one of the very few natural food sources of **melatonin**, the hormone that regulates your internal sleep-wake cycle. **Walnuts** provide additional melatonin and **ALA Omega-3s**, while **chamomile tea** contains **apigenin**, an antioxidant that binds to specific receptors in your brain to promote **muscle relaxation and anxiety reduction**."
+          "**Magnesium** and **healthy fats** create a steady blood sugar environment, assisting the switch to **rest-and-digest** mode for the central nervous system.",
+          "**Tart cherries** provide natural **melatonin** to regulate sleep. **Walnuts** provide ALA Omega-3s, and **chamomile's apigenin** binds receptors in your brain to reduce anxiety and oxidative neuro-inflammation."
         )
       },
       { 
-        title: 'Matcha Green Giant', benefit: 'Cellular Health & Energy', icon: <Leaf />, 
-        ingredients: ['1 tsp ceremonial grade matcha powder', '1 large handful fresh spinach', '75g frozen pineapple chunks', '1 tbsp raw hemp hearts', '240ml unsweetened almond milk'], 
-        instructions: [
-          'Sift your matcha powder through a small sieve to ensure there are no bitter clumps.',
-          'Add the spinach and frozen pineapple to the blender first.',
-          'Pour in the almond milk and add the hemp hearts for high-quality plant protein.',
-          'Blend on high for 90 seconds until the mixture is frothy and electric green.',
-          'Drink this mid-morning to maintain a steady, non-inflammatory focus.'
-        ],
+        title: 'Matcha Green Giant', time: '5 mins', tag: 'Energy', benefit: 'Cognitive Neuro-Protection', icon: <Leaf />, 
+        ingredients: ['1 tsp matcha powder', '1 large handful fresh baby spinach', '75g frozen pineapple', '1 tbsp raw hemp hearts', '240ml unsweetened almond milk'], 
+        instructions: ['Sift the matcha powder into the blender.', 'Add the spinach, frozen pineapple, and hemp hearts.', 'Blend on high speed until frothy and electric green.', 'Drink immediately for maximum antioxidant effect.'],
         description: createDesc(
-            "This drink provides a highly focused, **sustained energy lift** without the jittery crash associated with coffee. It floods your cells with **chlorophyll**, a natural detoxifier, and **high-quality plant proteins** from hemp that support muscle maintenance.",
-            "**Matcha** contains a high concentration of **L-theanine**, a rare amino acid that promotes a state of **relaxed alertness**. This works synergistically with natural caffeine to enhance cognitive function while **EGCG catechins** inhibit inflammatory markers in the brain and support overall cellular longevity."
+          "Provides a highly focused, **sustained energy lift** without the crash of coffee. It floods your cells with **chlorophyll**, a natural detoxifier, and **plant proteins** that support muscle maintenance.",
+          "**Matcha** contains a high concentration of **L-theanine**, an amino acid that promotes a state of **relaxed alertness**. This works with natural caffeine while **EGCG catechins** inhibit inflammatory markers in the brain."
         )
       },
       { 
-        title: 'Cherry Cacao Recovery', benefit: 'Muscle Recovery & Antioxidants', icon: <Sparkles />, 
-        ingredients: ['75g frozen tart cherries', '1 tbsp raw organic cacao powder', '1/4 ripe avocado', '240ml unsweetened oat milk', '1 tsp pure maple syrup (optional)'], 
-        instructions: [
-          'Pit your cherries if using fresh, though frozen is recommended for a thicker texture.',
-          'Combine the cherries, raw cacao, and avocado in the blender.',
-          'Add the oat milk; it provides a gentle sweetness that balances the rich cacao.',
-          'Blend on high until the texture is like a liquid chocolate truffle.',
-          'Consume within 30 minutes of exercise to maximize the muscle recovery window.'
-        ],
+        title: 'Cherry Cacao Recovery', time: '5 mins', tag: 'Post-Gym', benefit: 'Metabolic Waste Clearance', icon: <Zap />, 
+        ingredients: ['75g frozen tart cherries', '1 tbsp raw cacao powder', '1/4 avocado', '240ml unsweetened oat milk'], 
+        instructions: ['Pit cherries if fresh.', 'Blend cherries, cacao, and avocado with oat milk.', 'Blend for 60 seconds until thick like chocolate mousse.', 'Consume within 30 mins of exercise for muscle repair.'],
         description: createDesc(
-            "An ideal post-workout recovery drink. The **magnesium** in cacao helps relax tense muscles, while the **tart cherries** contain specific compounds that actively help your body **flush out metabolic waste** and reduce the inflammation caused by physical exertion.",
-            "**Raw cacao** is a **flavonoid powerhouse** that significantly improves blood flow and reduces **oxidative stress** in muscle tissue. The **healthy fats** from avocado ensure that the **fat-soluble vitamins** and phytonutrients from the cherries are fully absorbed, maximizing the recovery window."
+          "**Magnesium** in cacao relaxes muscles, while **tart cherries** contain compounds that actively help your body **flush out metabolic waste** after exertion.",
+          "**Raw cacao** is a flavonoid powerhouse that improves blood flow and reduces **oxidative stress** in muscle tissue. The **healthy fats** from avocado ensure the nutrients are fully absorbed."
         )
       },
       { 
-        title: 'Beetroot Blood Builder', benefit: 'Liver Detox & Circulation', icon: <Zap />, 
-        ingredients: ['1 small cooked beetroot (unpickled)', '75g frozen raspberries', '1 tbsp ground flaxseeds', '240ml pure coconut water'], 
-        instructions: [
-          'Ensure the beetroot is plain (steamed or roasted) and not pickled in vinegar.',
-          'Chop the beetroot into quarters and place it in the blender with the frozen raspberries.',
-          'Add the flaxseeds and the coconut water—this provides natural electrolytes.',
-          'Blend on high for 60 seconds until the mixture is a deep, jewel-toned magenta.',
-          'Perfect for post-travel or after a period of poor diet to support liver clearance.'
-        ],
+        title: 'Beetroot Builder', time: '7 mins', tag: 'Detox', benefit: 'Nitric Oxide Circulation Boost', icon: <Activity />, 
+        ingredients: ['1 small cooked beetroot (plain)', '75g frozen raspberries', '1 tbsp ground flaxseeds', '240ml pure coconut water'], 
+        instructions: ['Ensure beetroot is plain and cooked (unpickled).', 'Quarter beetroot and blend with all ingredients.', 'Blend on high speed until jewel-toned magenta.', 'Perfect as a mid-morning tonic for improved circulation.'],
         description: createDesc(
-            "Beetroot is a master liver supporter. This earthy yet sweet smoothie helps **improve oxygen delivery** to your muscles and provides a significant boost to your body's natural **Phase 2 detoxification** pathways, helping you feel lighter and more energized.",
-            "**Beets** contain **betalains**, potent antioxidants that support the liver in neutralizing and removing **inflammatory toxins**. The natural **nitrates** in the beetroot are converted into **nitric oxide** in the body, which relaxes blood vessels and improves overall **cardiovascular circulation**."
+          "Beetroot is a master liver supporter. This earthy blend helps **improve oxygen delivery** to your muscles and provides a boost to liver **Phase 2 detoxification**.",
+          "**Beets** contain **betalains**, potent antioxidants that support the liver in removing toxins. **Natural nitrates** in beetroot improve **cardiovascular circulation** by relaxing blood vessels."
         )
       },
       { 
-        title: 'Spiced Carrot Cake', benefit: 'Vision & Blood Sugar Balance', icon: <Coffee />, 
-        ingredients: ['1 medium carrot (chopped)', '2.5cm fresh ginger root', '1/2 tsp ground cinnamon', '30g raw walnut halves', '240ml unsweetened almond milk'], 
-        instructions: [
-          'Peel the carrot and chop it into very small cubes to help the blender achieve a smooth finish.',
-          'Grate the fresh ginger and add it along with the cinnamon and walnuts.',
-          'Pour in the almond milk.',
-          'Blend on high speed for at least 90 seconds to ensure the carrot is completely smooth.',
-          'This warming blend is fantastic for stabilizing energy levels in the late afternoon.'
-        ],
+        title: 'Spiced Carrot Cake', time: '5 mins', tag: 'Balance', benefit: 'Insulin Sensitivity Support', icon: <Coffee />, 
+        ingredients: ['1 medium carrot (chopped)', '2.5cm fresh ginger', '1/2 tsp ground cinnamon', '30g walnuts', '240ml almond milk'], 
+        instructions: ['Peel and finely chop carrot into 1cm cubes to assist the blender.', 'Combine all ingredients and blend on high for 90 seconds.', 'Perfect for afternoon blood sugar stability.'],
         description: createDesc(
-            "This blend allows you to enjoy the flavors of a classic treat while **stabilizing your energy levels**. It is exceptionally rich in **fiber** and warming spices that support your metabolism and prevent the afternoon energy slump.",
-            "**Cinnamon** is highly effective at improving **insulin sensitivity**, which prevents the rapid blood sugar spikes that trigger **systemic inflammation**. **Carrots** provide a massive dose of **beta-carotene**, a precursor to **Vitamin A**, which is essential for maintaining healthy vision and immune cell integrity."
+          "Stabilize your energy levels while enjoying classic flavors. This blend is rich in **fiber** and warming spices to prevent the afternoon blood sugar energy crash.",
+          "**Cinnamon** improves **insulin sensitivity**, preventing the rapid blood sugar spikes that trigger inflammation. **Carrots** provide **beta-carotene** (Vitamin A) for immune cell integrity."
         )
       }
     ],
     breakfast: [
-      { 
-        title: 'Overnight Omega Oats', benefit: 'Gut Health & Fibre', 
-        ingredients: ['50g jumbo organic rolled oats', '1 tbsp black chia seeds or ground flaxseeds', '150ml unsweetened almond or oat milk', '50g fresh blueberries', '20g crushed raw walnuts'], 
-        instructions: [
-          'In a clean glass jar, combine the jumbo oats and the seeds.',
-          'Pour in the milk and stir thoroughly to ensure no chia seeds clump at the bottom.',
-          'Seal the jar and place it in the refrigerator for at least 6 hours, ideally overnight.',
-          'In the morning, top with fresh blueberries and the crushed walnuts just before eating to maintain the crunch.'
-        ],
-        description: createDesc(
-            "A zero-effort breakfast that acts as a **prebiotic feast** for your gut microbiome. The high **Omega-3 content** from walnuts and seeds ensures your brain is fueled and your joints are lubricated for the day ahead.",
-            "The **beta-glucan fiber** in jumbo oats is a unique type of soluble fiber that feeds beneficial gut bacteria. A **healthy microbiome** is the primary foundation of a balanced immune system, preventing the chronic 'leaky gut' issues that lead to **widespread systemic inflammation**."
-        )
-      },
-      { 
-        title: 'Turmeric Scrambled Eggs', benefit: 'Morning Protein Boost', 
-        ingredients: ['2 large free-range organic eggs', '1/2 tsp ground turmeric', '1 generous pinch black pepper', '1 large handful fresh spinach', '1 slice toasted sourdough bread'], 
-        instructions: [
-          'In a small bowl, crack the eggs and whisk them with the turmeric and black pepper—the pepper is vital for turmeric absorption.',
-          'Heat a teaspoon of extra virgin olive oil in a non-stick pan over medium heat.',
-          'Gently fold the eggs with a spatula until they are 80% set, then add the fresh spinach to the pan.',
-          'Toss for 30 seconds until just wilted and serve immediately on the warm sourdough toast.'
-        ],
-        description: createDesc(
-            "A savory, protein-dense start utilizing **turmeric**, the world's most studied anti-inflammatory spice. The addition of **black pepper** is the 'master key' to this meal.",
-            "Turmeric’s active compound, **curcumin**, has low bioavailability on its own. The **piperine** in black pepper increases curcumin absorption by up to **2,000%**, allowing it to block inflammatory enzymes like **COX-2**."
-        )
-      },
-      { 
-        title: 'Berry & Chia Pot', benefit: 'Antioxidant Power', 
-        ingredients: ['3 tbsp black chia seeds', '200ml unsweetened coconut milk (carton)', '1/2 tsp pure vanilla extract', '75g fresh raspberries', '1 tbsp raw hemp hearts'], 
-        instructions: [
-          'Whisk the chia seeds, coconut milk, and vanilla extract together in a small bowl.',
-          'Wait 5 minutes for the seeds to begin swelling, then whisk again vigorously to prevent any clumps.',
-          'Cover and refrigerate for at least 30 minutes.',
-          'Before serving, layer the raspberries on top and finish with a sprinkle of hemp hearts.'
-        ],
-        description: createDesc(
-            "A cooling, pudding-like breakfast that is **incredibly gentle** on the digestive tract. Perfect for those who struggle with morning bloating.",
-            "**Chia seeds** are a powerhouse source of **ALA Omega-3**, which reduces **C-reactive protein** levels. Combined with the **anthocyanins** in raspberries, this pot provides massive **cellular protection**."
-        )
-      },
-      { 
-        title: 'Smashed Avocado', benefit: 'Healthy Fats & Zinc', 
-        ingredients: ['1/2 large ripe avocado', '1 slice toasted sourdough or rye bread', '1 tbsp raw pumpkin seeds', '1 small squeeze fresh lemon juice', '1 tsp extra virgin olive oil'], 
-        instructions: [
-          'Toast your bread until golden and firm.',
-          'In a small bowl, mash the avocado flesh with the lemon juice and a tiny pinch of sea salt.',
-          'Spread the avocado thickly onto the warm toast.',
-          'Sprinkle the pumpkin seeds over the top and finish with a light drizzle of olive oil.'
-        ],
-        description: createDesc(
-            "A nutritional masterpiece. The combination of **monounsaturated fats** and **zinc-rich seeds** creates a shield for your heart and boosts **immune resilience**.",
-            "**Oleic acid** found in avocado and olive oil significantly reduces inflammatory markers. **Pumpkin seeds** provide **zinc**, a mineral absolutely essential for the development and function of **T-cells**."
-        )
-      },
-      { 
-        title: 'Green Shakshuka', benefit: 'Iron & Immune Support', 
-        ingredients: ['2 eggs', '1 large handful kale (chopped)', '1 handful baby spinach', '1/2 avocado', '1/2 tsp ground cumin'], 
-        instructions: [
-          'Sauté the kale and spinach in a pan with cumin and olive oil over medium heat until softened.',
-          'Use a spoon to create two small wells in the greens.',
-          'Crack an egg into each well, cover the pan with a lid, and cook for 3-5 minutes until the whites are set.',
-          'Serve directly from the pan topped with sliced avocado.'
-        ],
-        description: createDesc(
-            "A vibrant, low-carb start. Packing two servings of **leafy greens** into your first meal provides the minerals needed for deep cellular repair.",
-            "**Vitamin K** and **chlorophyll** in kale and spinach help alkalize the body and reduce oxidative stress. The **healthy monounsaturated fats** in the avocado make the iron in the greens much more bioavailable."
-        )
-      },
-      { 
-        title: 'Sweet Potato Toast', benefit: 'Sustained Energy & Potassium', 
-        ingredients: ['2 slices sweet potato (1cm thick)', '2 tbsp unsweetened almond butter', '1/2 banana (sliced)', '1 tsp black chia seeds'], 
-        instructions: [
-          'Toast the sweet potato slices in a standard toaster 2-3 times on the highest setting until tender, or bake at 200°C for 15 minutes.',
-          'Spread each warm slice with almond butter.',
-          'Top with the banana slices and a sprinkle of chia seeds.',
-          'A fantastic gluten-free alternative that provides long-lasting fuel.'
-        ],
-        description: createDesc(
-            "A clever, whole-food alternative to bread. Provides a steady release of energy and a massive dose of **Vitamin A** for tissue repair.",
-            "**Sweet potatoes** have a **low glycemic index**, preventing the insulin spikes that cause inflammation. They are also rich in **beta-carotene**, which protects your body's mucosal barriers."
-        )
-      },
-      { 
-        title: 'Anti-Inflammatory Pancakes', benefit: 'Comfort Food Reimagined', 
-        ingredients: ['50g organic buckwheat flour', '1 large free-range egg', '100ml unsweetened almond milk', '50g fresh blueberries', '1/2 tsp ground cinnamon'], 
-        instructions: [
-          'In a bowl, whisk the buckwheat flour, egg, milk, and cinnamon into a smooth batter.',
-          'Gently fold in the fresh blueberries.',
-          'Heat a non-stick pan over medium heat with a little coconut oil.',
-          'Pour small amounts of batter and cook until bubbles form on top, then flip and cook until golden brown.',
-          'Serve warm with a tiny drizzle of honey if desired.'
-        ],
-        description: createDesc(
-            "Indulge without the inflammatory consequences of refined flour. **Buckwheat** is a nutrient-dense seed that supports heart health.",
-            "Buckwheat contains **rutin**, a bioflavonoid that strengthens blood vessels and has potent anti-inflammatory effects. **Anthocyanins** in blueberries remain stable even when lightly heated."
-        )
-      },
-      { 
-        title: 'Smoked Salmon Frittata', benefit: 'Brain Nourishment', 
-        ingredients: ['3 eggs', '50g smoked salmon (torn)', '50g asparagus tips', '1 tbsp fresh dill (chopped)'], 
-        instructions: [
-          'Whisk the eggs in a bowl with the fresh dill.',
-          'Lightly sauté the asparagus tips in an oven-proof pan for 3 minutes.',
-          'Pour the eggs over the asparagus and layer the torn salmon on top.',
-          'Cook on the stove for 2 minutes, then finish under a preheated grill (broiler) for 2-3 minutes until set and golden.'
-        ],
-        description: createDesc(
-            "A high-protein, high-omega-3 breakfast that fuels your brain and keeps your **joints lubricated** for the day ahead.",
-            "Oily fish like salmon provides **DHA and EPA**, which are essential for reducing **neuro-inflammation**. **Asparagus** acts as a gentle diuretic, helping the body flush out inflammatory toxins."
-        )
-      }
+      { title: 'Omega Oats', time: '5 mins Prep', tag: 'Gut-Friendly', benefit: 'Prebiotic Microbiome Support', ingredients: ['50g jumbo rolled oats', '1 tbsp chia seeds', '150ml almond milk', '50g blueberries', '20g walnuts'], instructions: ['Mix oats, seeds, and milk in a jar.', 'Stir well and refrigerate for 6 hours or overnight.', 'Top with fresh berries and walnuts before eating.'], description: createDesc("A zero-effort breakfast that acts as a **prebiotic feast** for your gut microbiome. High **Omega-3 content** from walnuts ensures your joints are lubricated.", "The **beta-glucan fiber** in jumbo oats feeds beneficial gut bacteria. A **healthy microbiome** is the primary foundation of a balanced immune system, preventing 'leaky gut' and **systemic inflammation**.") },
+      { title: 'Turmeric Eggs', time: '10 mins', tag: 'High Protein', benefit: 'COX-2 Enzyme Inhibition', ingredients: ['2 large eggs', '1/2 tsp ground turmeric', 'Pinch black pepper', 'Handful spinach', '1 slice sourdough'], instructions: ['Whisk the eggs with turmeric and black pepper.', 'Heat oil in pan over medium heat.', 'Scramble gently, adding spinach at the end to wilt.', 'Serve on warm toast for a protein-dense start.'], description: createDesc("Savory start utilizing **turmeric**, the world's most studied anti-inflammatory spice. The addition of **black pepper** is the 'master key' to this meal.", "**Curcumin** bioavailability is increased by **2,000%** by piperine in black pepper, allowing it to block inflammatory enzymes like **COX-2**, which are responsible for pain and swelling.") },
+      { title: 'Berry Chia Pot', time: '30 mins', tag: 'Anti-Bloat', benefit: 'ALA Omega-3 Support', ingredients: ['3 tbsp chia seeds', '200ml coconut milk', '1/2 tsp vanilla', '75g raspberries', '1 tbsp hemp hearts'], instructions: ['Mix the chia seeds, milk, and vanilla in a bowl.', 'Wait 5 minutes then whisk again to remove any lumps.', 'Chill in the fridge for at least 30 minutes until set.', 'Serve topped with raspberries and hemp hearts.'], description: createDesc("A cooling, pudding-like breakfast that is **incredibly gentle** on the digestive tract. Perfect for those who struggle with morning bloating.", "**Chia seeds** provide **Alpha-Linolenic Acid (ALA)**, reducing **C-reactive protein** levels. Anthocyanins in berries provide broad **cellular protection** against free radicals.") },
+      { title: 'Smashed Avocado', time: '5 mins', tag: 'Heart Health', benefit: 'Oleic Acid Cardio-Protection', ingredients: ['1/2 avocado', '1 slice sourdough', '1 tbsp pumpkin seeds', 'Lemon juice', 'Olive oil'], instructions: ['Toast your bread until golden.', 'Mash the avocado flesh with the lemon juice and a tiny pinch of salt.', 'Spread thickly over the toast.', 'Top with pumpkin seeds and a light drizzle of oil.'], description: createDesc("This classic dish is a nutritional masterpiece. The combination of **monounsaturated fats** and **zinc-rich seeds** creates a shield for your heart.", "**Oleic acid** found in avocado significantly reduces inflammatory markers. **Zinc** in pumpkin seeds is vital for the development and function of **T-cells** and neutrophils.") },
+      { title: 'Green Shakshuka', time: '12 mins', tag: 'Alkalizing', benefit: 'Vitamin K Bone Support', ingredients: ['2 eggs', '1 large handful kale', '1 handful spinach', '1/2 avocado', '1/2 tsp ground cumin'], instructions: ['Sauté chopped kale and spinach with cumin until soft.', 'Make two small wells in the greens and crack an egg into each.', 'Cover and cook on low for 4-5 minutes until set.', 'Serve with sliced avocado.'], description: createDesc("Vibrant and low-carb. Leafy greens provide minerals for deep cellular repair.", "**Vitamin K** and **chlorophyll** help alkalize the body and reduce oxidative stress. Healthy fats in avocado increase iron bioavailability from the greens.") },
+      { title: 'Sweet Potato Toast', time: '15 mins', tag: 'Gluten-Free', benefit: 'Beta-Carotene Barrier Repair', ingredients: ['2 sweet potato slices (1cm)', '2 tbsp almond butter', '1/2 banana', '1 tsp chia seeds'], instructions: ['Toast potato slices 2-3 times on high until tender.', 'Spread with almond butter.', 'Top with banana and chia seeds.', 'Grounding fuel source.'], description: createDesc("Whole-food alternative to bread. Provides a steady release of energy and a massive dose of **Vitamin A** for tissue health.", "The **low glycemic index** of sweet potatoes prevents the insulin spikes that cause inflammation. They are also rich in **beta-carotene**, which protects mucosal barriers.") },
+      { title: 'Indulgent Pancakes', time: '15 mins', tag: 'Vascular', benefit: 'Rutin Bioflavonoid Support', ingredients: ['50g buckwheat flour', '1 egg', '100ml almond milk', '50g blueberries', '1/2 tsp cinnamon'], instructions: ['Whisk the flour, egg, and milk into a smooth batter.', 'Gently fold in fresh blueberries.', 'Cook small circles in a pan over medium heat.', 'Flip when bubbles form.'], description: createDesc("Indulge without inflammatory refined flour. Buckwheat is a nutrient-dense seed, not a grain.", "**Buckwheat** contains **rutin**, which strengthens blood vessels and has potent anti-inflammatory effects. Blueberries provide stable antioxidants.") },
+      { title: 'Salmon Frittata', time: '12 mins', tag: 'Brain Fuel', benefit: 'DHA/EPA Neuro-Optimization', ingredients: ['3 eggs', '50g smoked salmon', '50g asparagus', '1 tbsp fresh dill'], instructions: ['Whisk eggs and dill together.', 'Lightly sauté the asparagus tips in an oven-proof pan for 3 minutes.', 'Add eggs and layer salmon on top.', 'Cook 2 mins, then finish under grill until set.'], description: createDesc("High-protein breakfast that fuels the brain and keeps **joints lubricated** for the day ahead.", "Oily fish provides **DHA and EPA**, essential for reducing **neuro-inflammation**. **Asparagus** acts as a gentle diuretic to flush toxins.") }
     ],
     lunch: [
-        { 
-          title: 'Quinoa & Beetroot Salad', benefit: 'Liver Detoxification', 
-          ingredients: ['100g cooked white quinoa', '1 medium cooked beetroot (plain)', '1/2 ripe avocado (sliced)', '1 large handful fresh rocket'], 
-          instructions: [
-            'Combine the cooled quinoa and fresh rocket in a large mixing bowl.',
-            'Slice the beetroot into small wedges and add to the bowl.',
-            'Prepare a dressing using 1 tbsp olive oil, a squeeze of lemon, and 1/2 tsp of grated ginger.',
-            'Toss the salad gently with the dressing.',
-            'Place the avocado slices on top just before serving to prevent mashing.'
-          ],
-          description: createDesc(
-              "A refreshing lunch supporting your **liver's natural filtering ability**. The colors indicate a broad spectrum of **protective phytonutrients**.",
-              "**Quinoa** is a complete protein for **tissue repair**. The **betalains** in beetroot support the liver's **Phase 2 detoxification**, neutralizing pro-inflammatory substances before they cause damage."
-          )
-        },
-        { 
-          title: 'Red Lentil & Ginger Soup', benefit: 'Easy Digestion', 
-          ingredients: ['100g red split lentils', '400ml low-sodium organic vegetable stock', '2.5cm fresh ginger (grated)', '1 tsp ground turmeric'], 
-          instructions: [
-            'Rinse the red lentils thoroughly under cold water.',
-            'In a medium pot, simmer the lentils in the vegetable stock with the ginger and turmeric for 20 minutes.',
-            'Once the lentils are very soft, use a stick blender to cream the soup until smooth.',
-            'This reduces the digestive effort required by the body while providing warming relief.'
-          ],
-          description: createDesc(
-              "Warm, grounding, and **soothing for the gut**. Formulated for days when your digestion feels sensitive, providing comfort without the load of dairy.",
-              "**Gingerol** and **shogaol** in ginger speed up **gastric emptying**, preventing inflammatory food particles from lingering. **Red lentils** provide soluble fiber to move toxins out of the body."
-          )
-        },
-        { 
-          title: 'Mackerel on Rye', benefit: 'High Omega-3 Intake', 
-          ingredients: ['1 tinned mackerel fillet (in olive oil)', '2 slices toasted rye bread', '1 large handful fresh rocket', '1 tsp apple cider vinegar'], 
-          instructions: [
-            'Lightly toast the rye bread until firm.',
-            'Flake the mackerel fillet onto the toast, including a teaspoon of the omega-rich olive oil from the tin.',
-            'In a small bowl, toss the rocket with apple cider vinegar to support stomach acid.',
-            'Pile the dressed rocket on top of the fish and serve immediately.'
-          ],
-          description: createDesc(
-              "One of the most potent anti-inflammatory lunches available. **Mackerel** is an Omega-3 powerhouse that directly targets systemic pain.",
-              "Mackerel is exceptionally high in **EPA/DHA Omega-3s**, which compete with pro-inflammatory Omega-6s. **Rye bread** provides a slower insulin response than wheat, further reducing inflammatory potential."
-          )
-        },
-        { 
-          title: 'Hummus & Veg Wrap', benefit: 'Plant Diversity', 
-          ingredients: ['1 wholemeal or gluten-free wrap', '2 tbsp organic hummus', '100g mixed roasted Mediterranean vegetables', '1 handful baby spinach'], 
-          instructions: [
-            'Spread a thick layer of hummus over the center of the wrap.',
-            'Arrange your roasted vegetables (peppers, courgettes, and onions are best) over the hummus.',
-            'Top with a generous handful of baby spinach.',
-            'Fold in the sides and roll tightly; slice in half diagonally for easy eating.'
-          ],
-          description: createDesc(
-              "A simple way to hit daily **plant diversity goals**. The healthy monounsaturated fats and fiber provide steady, crash-free energy.",
-              "**Chickpeas** provide protein and fiber to **stabilize blood sugar**. A diverse array of antioxidants from Mediterranean veg helps neutralize free radicals produced during daily stress."
-          )
-        },
-        { 
-          title: 'Sardines & Bean Salad', benefit: 'Bone Health & Focus', 
-          ingredients: ['1 tin sardines in olive oil', '100g cannellini beans (rinsed)', '1/2 fresh lemon', '1 handful fresh parsley (chopped)'], 
-          instructions: [
-            'In a bowl, mix the cannellini beans with the chopped parsley and a squeeze of lemon.',
-            'Place the sardines on top of the bean mixture.',
-            'Use the oil from the sardine tin as a natural dressing—it is loaded with Vitamin D and Omega-3s.',
-            'Season with a tiny pinch of sea salt and cracked black pepper.'
-          ],
-          description: createDesc(
-              "A pantry-staple lunch packing a massive punch. Rich in **Calcium, Vitamin D, and Omega-3s** to support both skeleton and spirit.",
-              "**Sardines** are a rare natural source of **Vitamin D**, essential for modulating the immune response. **Cannellini beans** provide **resistant starch**, which ferments to produce anti-inflammatory **butyrate**."
-        )
-        },
-        { 
-          title: 'Turmeric Cauliflower Bowl', benefit: 'Low-Carb Cleanse', 
-          ingredients: ['150g cauliflower rice', '30g chopped raw walnuts', '2 tbsp fresh pomegranate seeds', '1 handful fresh spinach'], 
-          instructions: [
-            'Sauté the cauliflower rice in a pan with a little olive oil and 1/2 tsp turmeric for 5 minutes.',
-            'Stir in the baby spinach until it just begins to wilt.',
-            'Transfer to a serving bowl and top with the crunchy walnuts and pomegranate seeds.',
-            'A light, cleansing lunch that supports cellular detoxification.'
-          ],
-          description: createDesc(
-              "A light, cleansing lunch mimicking rice without the glycemic load. **Pomegranate seeds** add a burst of antioxidant sweetness.",
-              "**Cruciferous vegetables** like cauliflower contain **sulforaphane**, which activates the **Nrf2 pathway**—the most powerful internal antioxidant defense system. **Turmeric** adds additional systemic relief."
-          )
-        },
-        { 
-          title: 'Sweet Potato & Bean Soup', benefit: 'Heart Health', 
-          ingredients: ['1 medium sweet potato (diced)', '100g black beans (rinsed)', '400ml organic vegetable stock', '1/2 tsp cumin'], 
-          instructions: [
-            'Simmer the diced sweet potato in the stock with cumin for 15 minutes until tender.',
-            'Stir in the rinsed black beans and heat through for 2 minutes.',
-            'For a creamier texture, blend half of the soup and then mix it back with the whole beans.',
-            'This provides a fiber-rich, heart-healthy meal that keeps you full for hours.'
-          ],
-          description: createDesc(
-              "A fiber-rich soup that supports **cardiovascular health**. The warming spices add depth and provide essential digestive support.",
-              "**Black beans** are high in **soluble fiber**, which binds to inflammatory cholesterol. **Sweet potatoes** provide **potassium**, helping regulate fluid balance and counteract high sodium levels."
-          )
-        },
-        { 
-          title: 'Green Goddess Wrap', benefit: 'Lean Muscle & Joints', 
-          ingredients: ['1 spinach or wholemeal wrap', '100g poached chicken breast', '1/2 ripe avocado', '1 large handful fresh basil'], 
-          instructions: [
-            'Blend the avocado with the fresh basil and a teaspoon of olive oil to create a thick green dressing.',
-            'Shred the poached chicken breast and mix it thoroughly with the dressing.',
-            'Spoon the mixture into the wrap and roll tightly.',
-            'The high protein content supports muscle repair without the heavy inflammation of red meat.'
-          ],
-          description: createDesc(
-              "A satisfying, protein-heavy wrap utilizing fresh herbs for a natural boost. **Basil** is a surprisingly powerful inflammation fighter.",
-              "Basil contains **eugenol**, which works similarly to over-the-counter anti-inflammatories by inhibiting the **COX enzyme**. Lean protein supports muscle maintenance without the inflammation of red meat."
-          )
-        }
+      { title: 'Quinoa Beet Salad', time: '15 mins', tag: 'Detox', benefit: 'Liver Phase 2 Detoxification', ingredients: ['100g quinoa', '1 beetroot', '1/2 avocado', 'Rocket'], instructions: ['Toss rocket with cooled quinoa.', 'Add beetroot wedges.', 'Dress with lemon-ginger oil.', 'Top with avocado slices.'], description: createDesc("Supports the liver's filtering ability using a broad spectrum of **protective phytonutrients**.", "**Betalains** in beetroot neutralize pro-inflammatory substances before they enter circulation.") },
+      { title: 'Red Lentil Soup', time: '25 mins', tag: 'Digestive', benefit: 'Soluble Fiber Toxin Binding', ingredients: ['100g red lentils', '400ml veg stock', '2.5cm ginger', '1 tsp turmeric'], instructions: ['Rinse lentils thoroughly.', 'Simmer with stock and spices for 20 mins.', 'Stick-blend until creamy for easier digestion.'], description: createDesc("Grounding and soothing for the gut. Formulated for sensitive digestive tracks.", "**Gingerol** speeds gastric emptying, preventing inflammatory food particles from lingering.") },
+      { title: 'Mackerel on Rye', time: '5 mins', tag: 'High Omega-3', benefit: 'Resolvin Production', ingredients: ['1 mackerel fillet', '2 slices rye bread', 'Rocket', '1 tsp ACV'], instructions: ['Toast rye.', 'Flake mackerel on top.', 'Toss rocket with ACV and pile over fish.'], description: createDesc("One of the most potent meals for targeting **systemic pain**.", "Omega-3s compete with pro-inflammatory Omega-6s to produce **resolvins**, which actively shut down inflammation.") },
+      { title: 'Hummus & Veg Wrap', time: '10 mins', tag: 'Plant-Based', benefit: 'Diversity Microbiome Fuel', ingredients: ['1 wrap', '2 tbsp hummus', '100g roasted veg', 'Spinach'], instructions: ['Spread hummus thickly on wrap.', 'Layer roasted veg and spinach.', 'Fold and roll tightly.'], description: createDesc("Increases plant diversity to feed the immune system with fiber and healthy fats.", "Chickpeas provide protein and fiber to **stabilize blood sugar**, preventing the insulin spikes that drive chronic inflammation.") },
+      { title: 'Sardine & Bean Salad', time: '8 mins', tag: 'Bone Health', benefit: 'Vitamin D Immune Modulation', ingredients: ['1 tin sardines', '100g cannellini beans', 'Lemon', 'Parsley'], instructions: ['Mix beans, parsley, and lemon.', 'Top with sardines.', 'Use sardine oil as part of the dressing.'], description: createDesc("Pantry staple rich in **Calcium and Omega-3s** for skeleton support.", "Sardines are a rare natural source of **Vitamin D**, essential for modulating immune response and reducing autoimmune flare-ups.") },
+      { title: 'Cauliflower Bowl', time: '12 mins', tag: 'Low-Carb', benefit: 'Nrf2 Pathway Activation', ingredients: ['150g cauliflower rice', '30g walnuts', '2 tbsp pomegranate', 'Spinach'], instructions: ['Sauté cauliflower rice with turmeric.', 'Stir in spinach.', 'Top with walnuts and pomegranate.'], description: createDesc("Low-carb cleanse that mimics rice texture without the glycemic load.", "**Sulforaphane** in cauliflower activates the **Nrf2 pathway**—the most powerful internal antioxidant system.") },
+      { title: 'Sweet Potato Soup', time: '20 mins', tag: 'Heart', benefit: 'Soluble Fiber Clearing', ingredients: ['1 medium sweet potato', '100g black beans', 'Veg stock', 'Cumin'], instructions: ['Simmer potato in stock for 15 mins.', 'Add black beans.', 'Blend half for texture.'], description: createDesc("Fiber-rich soup that supports heart health and fluid balance.", "Black beans bind to inflammatory cholesterol. **Potassium** in sweet potatoes helps regulate fluid balance.") },
+      { title: 'Green Goddess Wrap', time: '12 mins', tag: 'High Protein', benefit: 'COX Enzyme Suppression', ingredients: ['1 wrap', '100g chicken', '1/2 avocado', 'Basil'], instructions: ['Blend avocado and basil for dressing.', 'Shred chicken and mix.', 'Roll into wrap.'], description: createDesc("Herb-forward lunch using basil as a natural inflammation fighter.", "**Eugenol** in fresh basil has been shown to inhibit the **COX enzyme**, similar to anti-inflammatory meds.") }
     ],
     dinner: [
-        { 
-          title: 'Baked Salmon & Sweet Potato', benefit: 'Heart & Skin Health', 
-          ingredients: ['1 salmon fillet (150g)', '1 medium sweet potato (cubed)', '100g fresh broccoli florets', '1/2 fresh lemon'], 
-          instructions: [
-            'Preheat oven to 200°C.',
-            'Toss sweet potato cubes in olive oil and bake for 10 minutes.',
-            'Add the salmon fillet and broccoli to the tray; drizzle with lemon and more oil.',
-            'Bake everything for a further 12-15 minutes until the salmon is flaky.',
-            'This provides a balanced hit of fats and fiber for evening repair.'
-          ],
-          description: createDesc(
-              "The ultimate anti-inflammatory dinner. A perfect balance of **Omega-3s**, **complex carbohydrates**, and **fiber** to ensure repair while you sleep.",
-              "**Wild-caught salmon** provides long-chain **EPA/DHA**, the building blocks for anti-inflammatory signaling. **Broccoli** provides **Vitamin C and sulforaphane** to support natural antioxidant defenses."
-          )
-        },
-        { 
-          title: 'Chickpea Sunshine Curry', benefit: 'Systemic Relief', 
-          ingredients: ['200g cooked chickpeas', '100ml light coconut milk', '1 tsp turmeric', '1 tsp fresh grated ginger', '2 large handfuls spinach'], 
-          instructions: [
-            'In a large pan, sauté the grated ginger and turmeric in a little oil for 1 minute.',
-            'Add the chickpeas and the coconut milk.',
-            'Simmer gently on low heat for 15 minutes to let the flavors meld.',
-            'Stir in the fresh spinach right at the end until just wilted; serve with brown rice.'
-          ],
-          description: createDesc(
-              "A mild, fragrant curry filling your kitchen with healing aromas. Spices work together to **lower systemic inflammation**.",
-              "The combination of **turmeric and ginger** creates a 'synergistic effect', where active compounds enhance each other. **Chickpeas** provide slow-release carbs for steady evening energy."
-          )
-        },
-        { 
-          title: 'Turkey & Ginger Stir-fry', benefit: 'Lean Muscle & Pain Relief', 
-          ingredients: ['150g turkey strips', '100g mixed stir-fry vegetables', '2.5cm fresh ginger matchsticks', '1 clove minced garlic'], 
-          instructions: [
-            'Heat a wok with a teaspoon of avocado oil.',
-            'Stir-fry the turkey strips with garlic and ginger until fully cooked through.',
-            'Add the mixed vegetables and toss for 4 minutes until they are tender-crisp.',
-            'Add a tablespoon of tamari for a non-inflammatory salty finish.'
-          ],
-          description: createDesc(
-              "High-protein dinner utilizing large amounts of **fresh ginger** to target **joint and muscle pain**. Lean turkey is an excellent source of **zinc**.",
-              "Ginger acts as a natural pain reliever by **suppressing leukotrienes**—inflammatory molecules causing swelling. **Tamari** is used to avoid common grain-based inflammatory triggers."
-          )
-        },
-        { 
-          title: 'Cod with Garlic & Parsley', benefit: 'Gentle Digestion', 
-          ingredients: ['150g fresh cod fillet', '1 large clove garlic (minced)', '1 tbsp chopped fresh parsley', '100g boiled baby potatoes'], 
-          instructions: [
-            'Place the cod on a large piece of foil.',
-            'Top the fish with the minced garlic, parsley, lemon slices, and a drizzle of olive oil.',
-            'Wrap the foil into a parcel and bake for 15 minutes at 180°C.',
-            'Serve with the baby potatoes for a light, easy-to-digest evening meal.'
-          ],
-          description: createDesc(
-              "A light evening meal easy on the digestive system. **Garlic and parsley** provide a potent antimicrobial and anti-inflammatory punch.",
-              "**Garlic** contains **allicin**, which supports the immune system. **Parsley** is highly **alkalizing** and rich in **Vitamin K**, which is essential for bone density and blood integrity."
-          )
-        },
-        { 
-          title: 'Turmeric Lemon Chicken', benefit: 'Post-Workout Healing', 
-          ingredients: ['150g chicken breast (chopped)', '1/2 fresh lemon', '1 tsp ground turmeric', '1 medium courgette (sliced)'], 
-          instructions: [
-            'Marinate the chicken pieces in the lemon juice and turmeric for 15 minutes.',
-            'Roast the chicken and courgette slices on a baking tray at 200°C for 25 minutes.',
-            'The lemon and turmeric work together to speed up the repair of exercised muscles.'
-          ],
-          description: createDesc(
-              "A simple, clean meal focusing on **repairing tissues** after physical activity. Lemon juice helps soften protein for easier digestion.",
-              "**Vitamin C** from lemon assists in **collagen synthesis**, aiding the repair of tendons. **Turmeric** targets the systemic inflammation that builds up after heavy exercise."
-          )
-        },
-        { 
-          title: 'Walnut & Lentil Bolognese', benefit: 'Cellular Renewal', 
-          ingredients: ['100g cooked brown lentils', '50g crushed walnuts', '200g organic crushed tomatoes', '1 medium courgette'], 
-          instructions: [
-            'In a pan, sauté minced garlic and add the cooked lentils and walnuts.',
-            'Pour in the crushed tomatoes and simmer for 15 minutes to allow the sauce to thicken.',
-            'Spiralise the courgette into noodles and serve the hot sauce over the raw "zoodles".'
-          ],
-          description: createDesc(
-              "A plant-based classic. **Walnuts and lentils** provide rich texture and a massive dose of **plant protein and healthy fats**.",
-              "**Lentils** are high in **folate**, essential for DNA synthesis and repair. **Lycopene** in tomatoes becomes more bioavailable when cooked, shielding against oxidative stress."
-          )
-        },
-        { 
-          title: 'Miso Glazed Black Cod', benefit: 'Deep Hydration', 
-          ingredients: ['150g cod fillet', '1 tbsp organic miso paste', '1 tsp fresh ginger (grated)', '100g steamed bok choy'], 
-          instructions: [
-            'Mix the miso paste and ginger with a tiny splash of water.',
-            'Spread the mixture over the cod fillet and bake for 15 minutes at 200°C.',
-            'Steam the bok choy separately for 3 minutes and serve on the side.'
-          ],
-          description: createDesc(
-              "A sophisticated dinner bringing **fermented goodness** to your plate. **Miso** is a great way to support gut health in the evening.",
-              "Miso provides **live probiotics** for a healthy microbiome. **Bok choy** belongs to the cruciferous family, providing **glucosinolates** that support your natural antioxidant systems."
-          )
-        },
-        { 
-          title: 'Anti-Inflammatory Veggie Stew', benefit: 'Microbiome Diversity', 
-          ingredients: ['1/2 aubergine (cubed)', '200g crushed tomatoes', '100g cooked chickpeas', '1 tbsp extra virgin olive oil'], 
-          instructions: [
-            'Sauté the aubergine cubes and minced garlic in olive oil until the aubergine is very soft.',
-            'Add the tomatoes and chickpeas and bring to a gentle simmer.',
-            'Cover and cook for 20 minutes on the lowest setting until the stew is rich and thick.'
-          ],
-          description: createDesc(
-              "A hearty stew allowing flavors to meld. Rich in **fiber** and diverse plant compounds that feed the immune system.",
-              "**Aubergine** contains **nasunin**, a potent antioxidant in the purple skin that protects cell membranes. Slow cooking makes the **fiber** very easy for the gut to handle."
-          )
-        }
+      { title: 'Baked Salmon', time: '25 mins', tag: 'Repair', benefit: 'Pro-Resolving Mediator Precursor', ingredients: ['1 salmon fillet', '1 sweet potato', '100g broccoli', 'Lemon'], instructions: ['Bake potato wedges for 10 mins at 200C.', 'Add salmon and broccoli.', 'Bake 15 mins more.', 'Drizzle with lemon.'], description: createDesc("The gold-standard anti-inflammatory dinner. Provides the ideal balance of **Omega-3s** and fiber for systemic repair while you sleep.", "**EPA/DHA** in salmon are fundamental building blocks for signaling molecules that actively tell your immune system to switch into repair mode.") },
+      { title: 'Sunshine Curry', time: '20 mins', tag: 'Relief', benefit: 'Synergistic Relief Pathway', ingredients: ['200g chickpeas', '100ml coconut milk', 'Turmeric/Ginger', 'Spinach'], instructions: ['Sauté ginger and turmeric.', 'Add chickpeas and coconut milk.', 'Simmer 15 mins.', 'Stir in spinach.'], description: createDesc("Mild curry that uses multiple spices to lower systemic inflammation.", "The combination of **turmeric and ginger** creates a 'synergistic effect', where the active compounds significantly enhance each other.") },
+      { title: 'Ginger Stir-fry', time: '15 mins', tag: 'Muscle Pain', benefit: 'Leukotriene Suppression', ingredients: ['150g turkey', '100g veg', '2.5cm ginger', 'Tamari'], instructions: ['Stir-fry turkey with garlic and ginger.', 'Add veg and toss 4 mins.', 'Season with tamari.'], description: createDesc("Utilizes large amounts of **fresh ginger** to target **joint and muscle pain** directly.", "Ginger acts as a natural pain reliever by **suppressing leukotrienes**—inflammatory molecules causing swelling.") },
+      { title: 'Garlic Parsley Cod', time: '18 mins', tag: 'Immunity', benefit: 'Allicin Antimicrobial Action', ingredients: ['150g cod', '1 clove garlic', '1 tbsp parsley', '100g baby potatoes'], instructions: ['Place cod on foil with garlic and parsley.', 'Wrap and bake 15 mins.', 'Serve with boiled potatoes.'], description: createDesc("A light evening meal easy on the digestive system with a potent antimicrobial punch.", "**Allicin** in garlic supports immunity by stimulating white blood cells. **Parsley** is highly alkalizing.") },
+      { title: 'Lemon Chicken', time: '30 mins', tag: 'Workout', benefit: 'Collagen Synthesis Support', ingredients: ['150g chicken', '1/2 lemon', '1 tsp turmeric', '1 courgette'], instructions: ['Marinate chicken in lemon and turmeric.', 'Roast at 200C for 25 mins with courgettes.', 'Serve hot.'], description: createDesc("Focuses on repairing connective tissues after physical activity using Vitamin C and curcumin.", "**Vitamin C** from fresh lemon assists in **collagen synthesis**, aiding the repair of tendons after exercise.") },
+      { title: 'Lentil Bolognese', time: '25 mins', tag: 'Cellular', benefit: 'Bioavailable Lycopene Shield', ingredients: ['100g lentils', '50g walnuts', '200g tomatoes', '1 courgette'], instructions: ['Sauté garlic and lentils.', 'Add crushed walnuts and tomatoes.', 'Simmer 15 mins.', 'Serve over zoodles.'], description: createDesc("Plant-based classic rich in folate for DNA synthesis and cellular repair.", "**Lycopene** in tomatoes becomes more bioavailable when cooked, shielding against oxidative stress.") },
+      { title: 'Miso Black Cod', time: '20 mins', tag: 'Gut-Health', benefit: 'Probiotic Microbiome Support', ingredients: ['150g cod', '1 tbsp miso', '1 tsp ginger', '100g bok choy'], instructions: ['Glaze cod with miso and ginger.', 'Bake 15 mins.', 'Serve with steamed bok choy.'], description: createDesc("Sophisticated dinner bringing **fermented goodness** and probiotics to your microbiome.", "**Miso** provides beneficial bacteria while **bok choy** supports your natural antioxidant systems.") },
+      { title: 'Veggie Stew', time: '30 mins', tag: 'Systemic', benefit: 'Nasunin Cell Protection', ingredients: ['1/2 aubergine', '200g tomatoes', '100g chickpeas', 'Garlic'], instructions: ['Sauté aubergine until soft.', 'Simmer with tomatoes and chickpeas for 20 mins.', 'Serve with rye bread.'], description: createDesc("Hearty stew where the anti-inflammatory flavors meld together to feed the immune system.", "**Aubergine** contains **nasunin**, an antioxidant in the purple skin that protects cell membranes.") }
     ],
     perimenopause: [
-      { 
-        title: 'Maca & Berry Smoothie', benefit: 'Hot Flush Relief', 
-        ingredients: ['1 tbsp raw maca powder', '75g frozen blueberries', '1/2 medium cucumber (peeled)', '1 tbsp ground flaxseeds', '240ml chilled almond milk'], 
-        instructions: [
-          'Combine the blueberries, peeled cucumber, maca, and flaxseeds in a blender.',
-          'Pour in the almond milk.',
-          'Blend on high for 60 seconds; the cucumber provides an immediate cooling thermal effect.'
-        ],
-        description: createDesc(
-            "A cooling smoothie designed to **stabilize energy levels** and ease hormonal shifts. It targets the 'internal heat' felt during perimenopause.",
-            "**Maca** is a powerful **adaptogen** that supports the endocrine system. **Cucumber** provides deep cellular hydration and acts as a **natural cooling agent** to counter hot flushes."
-        )
-      },
-      { 
-        title: 'Phytoestrogen Salad', benefit: 'Oestrogen Balancing', 
-        ingredients: ['100g steamed edamame beans', '1 large handful mixed greens', '30g pumpkin seeds', '1/2 ripe avocado', 'Tahini dressing'], 
-        instructions: [
-          'Steam the edamame beans until tender (about 4 minutes).',
-          'Toss the beans with the mixed greens and seeds in a large bowl.',
-          'Top with sliced avocado and a generous drizzle of tahini dressing for balanced hormones.'
-        ],
-        description: createDesc(
-            "A nutrient-rich salad providing **plant-based estrogens** to gently support hormonal harmony during transitions.",
-            "**Edamame** contains **isoflavones**, a type of phytoestrogen that can modulate the effects of estrogen in the body, smoothing out hormonal fluctuations."
-        )
-      },
-      { 
-        title: 'Tofu & Broccoli Stir-Fry', benefit: 'Bone Density', 
-        ingredients: ['150g firm organic tofu (cubed)', '100g fresh broccoli florets', '1 tbsp sesame oil', '1 tsp grated ginger', '1 tbsp tamari'], 
-        instructions: [
-          'Pan-fry the tofu cubes in sesame oil until they are golden on all sides.',
-          'Add the ginger and broccoli, stir-frying for 4 minutes with a splash of water.',
-          'Add the tamari at the very end to avoid burning the sauce.'
-        ],
-        description: createDesc(
-            "Focus on bone-strengthening **minerals** and **plant protein**. This meal is essential as natural estrogen levels decline.",
-            "**Tofu** is a rich source of **calcium and phytoestrogens**. **Broccoli** provides **Vitamin K**, which is essential for maintaining bone mineral density."
-        )
-      },
-      { 
-        title: 'Sage & Pumpkin Seed Chicken', benefit: 'Night Sweat Reduction', 
-        ingredients: ['150g chicken breast', '1 tbsp fresh sage (finely chopped)', '30g crushed pumpkin seeds', '1 tbsp extra virgin olive oil'], 
-        instructions: [
-          'Coat the chicken breast in olive oil, then press the chopped sage and crushed pumpkin seeds onto the meat.',
-          'Bake at 200°C for 25 minutes until cooked through and the seeds are toasted.',
-          'Sage is a traditional remedy for reducing the intensity of hot flushes and sweats.'
-        ],
-        description: createDesc(
-            "A grounding dinner utilizing the properties of **sage**. It is specifically targeted at temperature regulation.",
-            "**Sage** has been used traditionally for centuries to manage **excessive sweating**. **Pumpkin seeds** provide **magnesium**, which calms the nervous system for better rest."
-        )
-      }
+      { title: 'Maca Smoothie', time: '5 mins', tag: 'Hormonal', benefit: 'Endocrine System Balancing', ingredients: ['1 tbsp maca powder', '75g blueberries', '1/2 cucumber', '1 tbsp flax'], instructions: ['Peel cucumber.', 'Blend with all items on high.', 'The cucumber provides cooling thermal relief.'], description: createDesc("Designed to stabilize energy levels and target internal heat felt during shifts.", "**Maca adaptogen** supports the endocrine system to help balance fluctuating estrogen levels during transition.") },
+      { title: 'Phytoestrogen Salad', time: '10 mins', tag: 'Oestrogen', benefit: 'Natural Isoflavone Support', ingredients: ['100g edamame', 'Mixed greens', '30g pumpkin seeds', 'Avocado'], instructions: ['Steam edamame for 4 mins.', 'Toss with greens and seeds.', 'Top with avocado and tahini.'], description: createDesc("Nutrient-rich salad providing natural plant-based estrogens to support harmony.", "**Isoflavones** in edamame mimic or modulate the effects of estrogen, smoothing fluctuations.") },
+      { title: 'Tofu Stir-fry', time: '15 mins', tag: 'Mineral', benefit: 'Phyto-Nutrient Bone Protection', ingredients: ['150g tofu', '100g broccoli', 'Sesame oil', 'Ginger'], instructions: ['Pan-fry tofu until golden.', 'Add ginger and broccoli.', 'Steam with a splash of water.'], description: createDesc("Focus on bone-strengthening minerals crucial during estrogen decline.", "**Tofu and broccoli** provide high doses of **calcium and Vitamin K** for density.") },
+      { title: 'Sage Chicken', time: '25 mins', tag: 'Hyperhidrosis', benefit: 'Hyperhidrosis Management', ingredients: ['150g chicken', '1 tbsp sage', '30g pumpkin seeds', 'Olive oil'], instructions: ['Coat chicken in oil/sage/seeds.', 'Bake at 200C for 25 mins.', 'Serve with greens.'], description: createDesc("Grounding dinner using sage for temperature regulation.", "**Sage** is a traditional remedy recognized for reducing hot flushes and night sweats.") }
     ],
     endometriosis: [
-      { 
-        title: 'Turmeric Ginger Broth', benefit: 'Pelvic Relief', 
-        ingredients: ['400ml low-sodium bone broth', '1 tbsp fresh ginger (sliced)', '1 tsp ground turmeric', '1 large clove garlic (crushed)', '1 handful fresh baby spinach'], 
-        instructions: [
-          'Simmer the broth with the ginger, turmeric, and garlic for 15 minutes on a low heat.',
-          'Do not let the broth boil hard, as this can degrade the anti-inflammatory enzymes.',
-          'Stir in the fresh spinach just before serving; sip while warm for pelvic comfort.'
-        ],
-        description: createDesc(
-            "Liquid medicine for the body. Floods the **pelvic area** with warmth and potent **anti-pain nutrients** to manage discomfort naturally.",
-            "The combination of high-dose **ginger and turmeric** specifically targets **prostaglandin production**—the chemical messengers responsible for triggering pelvic pain."
-        )
-      },
-      { 
-        title: 'Omega-3 Sardine Smash', benefit: 'Pain Management', 
-        ingredients: ['1 tin sardines in olive oil', '1/2 large avocado', '1 slice toasted sourdough', 'Squeeze of fresh lemon'], 
-        instructions: [
-          'In a small bowl, mash the sardines and avocado together with a fork.',
-          'Add the lemon juice and spread the mixture thickly over the warm sourdough toast.',
-          'The extreme density of Omega-3s targets the pathways that create pelvic pain.'
-        ],
-        description: createDesc(
-            "A high-impact meal for pain management. The sheer density of **Omega-3s** is designed to actively block pain pathways.",
-            "**Sardines** provide an extremely high **Omega-3 to Omega-6 ratio**, which is critical for lowering the overall inflammatory load in the reproductive system."
-        )
-      },
-      { 
-        title: 'Warm Lentil Detox', benefit: 'Excess Oestrogen Removal', 
-        ingredients: ['100g cooked green lentils', '1 medium roasted beetroot (cubed)', '1 handful rocket', 'Dressing: Apple Cider Vinegar'], 
-        instructions: [
-          'Gently warm the cooked lentils in a pan.',
-          'Mix with the roasted beetroot cubes and fresh rocket leaves.',
-          'Dress with 1 tbsp of apple cider vinegar to support hormone clearance via the liver and gut.'
-        ],
-        description: createDesc(
-            "Fiber is key for managing endometriosis. This meal supports the **liver and gut** in removing excess hormones.",
-            "Excess estrogen can drive tissue growth. The **fiber** in lentils and **betalains** in beetroot support the body's natural elimination pathways to maintain balance."
-        )
-      },
-      { 
-        title: 'Wild Salmon & Asparagus', benefit: 'Anti-Bloating', 
-        ingredients: ['1 wild salmon fillet', '100g fresh asparagus spears', '1 tbsp extra virgin olive oil', '1/2 fresh lemon'], 
-        instructions: [
-          'Place the salmon and asparagus on a baking tray.',
-          'Drizzle with olive oil and bake for 15 minutes at 180°C.',
-          'The asparagus acts as a natural diuretic to help ease the "endo belly" bloating.'
-        ],
-        description: createDesc(
-            "A clean meal targeting **'endo belly' bloating** and providing essential fats needed for **cellular repair** and tissue health.",
-            "**Asparagus** contains **asparagine**, an amino acid acting as a natural diuretic to help shed excess fluid. **Salmon** provides the **Omega-3s** needed to reduce internal scarring."
-        )
-      }
+      { title: 'Turmeric Broth', time: '15 mins', tag: 'Pelvic Pain', benefit: 'Prostaglandin Synthesis Blockade', ingredients: ['400ml bone broth', '1 tbsp ginger', '1 tsp turmeric', 'Garlic'], instructions: ['Simmer broth with spices for 15 mins.', 'Add spinach at end.', 'Sip while warm.'], description: createDesc("Floods the pelvic area with warmth and potent anti-pain nutrients to manage cyclic discomfort.", "Ginger and turmeric target **prostaglandin production**—the molecules responsible for pelvic pain.") },
+      { title: 'Sardine Smash', time: '5 mins', tag: 'Lipid', benefit: 'Pro-Resolving Mediator Dose', ingredients: ['1 tin sardines', '1/2 avocado', 'Sourdough', 'Lemon'], instructions: ['Mash sardines and avocado.', 'Spread on toast with lemon juice.', 'Season with black pepper.'], description: createDesc("High-impact meal designed to actively block pain pathways using Omega-3s.", "Sardines provide an extreme **Omega-3 to 6 ratio**, critical for lowering reproductive inflammation.") },
+      { title: 'Lentil Detox', time: '10 mins', tag: 'Metabolic', benefit: 'Estrogen Clearance Pathways', ingredients: ['100g lentils', '1 beetroot', 'Rocket', 'ACV'], instructions: ['Warm cooked lentils.', 'Mix with roasted beetroot and rocket.', 'Dress with apple cider vinegar.'], description: createDesc("Fiber-rich meal designed to support the liver in removing excess estrogen.", "Fiber and **betalains** support natural elimination pathways to prevent recycling of hormones.") },
+      { title: 'Salmon Asparagus', time: '18 mins', tag: 'Diuretic', benefit: 'Diuretic Asparagine Action', ingredients: ['1 salmon fillet', '100g asparagus', 'Olive oil', 'Lemon'], instructions: ['Bake salmon and asparagus for 15 mins.', 'Drizzle with olive oil and lemon.'], description: createDesc("Targets 'endo belly' bloating while providing the essential fats needed for cellular repair.", "**Asparagine** in asparagus acts as a natural diuretic to shed excess fluid.") }
     ],
     hormones: [
-      { 
-        title: 'Seed Cycling Smoothie', benefit: 'Cycle Phase Support', 
-        ingredients: ['1 tbsp seed blend (Flax/Pumpkin OR Sesame/Sunflower)', '1/2 small ripe banana', '1 handful fresh spinach', '240ml unsweetened oat milk'], 
-        instructions: [
-          'Select your seed blend based on your cycle phase.',
-          'Combine all ingredients in a blender and blend on high for 60 seconds.',
-          'Consuming these specific minerals daily supports the regular clearance of hormones.'
-        ],
-        description: createDesc(
-            "A rhythmic approach to nutrition. By **rotating seed intake** with your cycle, you provide the minerals your body needs most each month.",
-            "**Flax and pumpkin seeds** provide zinc and lignans for the **follicular phase**, while **sesame and sunflower seeds** provide Vitamin E for the **luteal phase**."
-        )
-      },
-      { 
-        title: 'Cruciferous Crunch', benefit: 'Oestrogen Detox', 
-        ingredients: ['100g fresh kale (shredded)', '50g red cabbage (shredded)', '30g raw walnuts', 'Lemon and olive oil dressing'], 
-        instructions: [
-          'Massage the kale and cabbage with the lemon and oil dressing for 3 minutes to soften the fiber.',
-          'Top with raw walnuts for healthy fats.',
-          'Cruciferous vegetables are essential for the liver to process estrogen correctly.'
-        ],
-        description: createDesc(
-            "Raw cruciferous vegetables require 'massage' to release benefits. This salad is a masterclass in **hormonal detoxification**.",
-            "Cruciferous vegetables contain **Indole-3-Carbinol (I3C)**, which converts to **DIM**. DIM helps the liver metabolize estrogen into its most beneficial, non-inflammatory forms."
-        )
-      },
-      { 
-        title: 'Walnut Crusted Cod', benefit: 'Omega 3/6 Ratio', 
-        ingredients: ['150g fresh cod fillet', '1 tbsp raw hemp hearts', '1 tbsp finely crushed walnuts', '1 tsp Dijon mustard'], 
-        instructions: [
-          'Spread a thin layer of mustard over the top of the cod fillet.',
-          'Press the hemp and walnut mixture onto the mustard to create a crust.',
-          'Bake for 15 minutes at 180°C until the fish flakes easily.'
-        ],
-        description: createDesc(
-            "A sophisticated dinner ensuring a **balanced ratio** of essential fatty acids to support brain and hormone health.",
-            "**Cod** is a very lean, low-toxin protein. The **walnut and hemp crust** provides plant-based fats that act as vital precursors to hormone production."
-        )
-      },
-      { 
-        title: 'Sweet Potato Balancer', benefit: 'Progesterone Support', 
-        ingredients: ['1 medium sweet potato', '2 tbsp organic tahini', '1 tsp ground cinnamon', '1 handful fresh steamed spinach'], 
-        instructions: [
-          'Bake the sweet potato whole until very soft (about 45 minutes).',
-          'Split open and fill with the steamed spinach.',
-          'Drizzle with the tahini and a sprinkle of cinnamon for blood sugar balance and progesterone support.'
-        ],
-        description: createDesc(
-            "A grounding meal beneficial in the second half of your cycle to support **blood sugar** and **progesterone production**.",
-            "The **complex carbohydrates** in sweet potato prevent blood sugar dips that cause mood swings, while the **healthy fats** in tahini support progesterone levels."
-        )
-      }
+      { title: 'Seed Smoothie', time: '5 mins', tag: 'Rhythm', benefit: 'Lignan Hormone Modulation', ingredients: ['1 tbsp seeds (phase correct)', '1/2 banana', 'Spinach', 'Oat milk'], instructions: ['Select correct seeds for current phase.', 'Blend until smooth.', 'Consume daily.'], description: createDesc("Provides the specific minerals and lignans your body needs most each month.", "**Flax/Pumpkin** (Follicular) or **Sesame/Sunflower** (Luteal) help modulate balance.") },
+      { title: 'Cruciferous Crunch', time: '10 mins', tag: 'DIM', benefit: 'I3C & DIM Pathway Support', ingredients: ['100g kale', '50g red cabbage', '30g walnuts', 'Lemon'], instructions: ['Massage kale/cabbage with lemon and oil.', 'Top with walnuts.', 'Eat slowly.'], description: createDesc("A masterclass in hormonal detoxification through the liver.", "**Indole-3-Carbinol (I3C)** converts to **DIM**, which helps metabolize used estrogen.") },
+      { title: 'Crusted Cod', time: '15 mins', tag: 'Lipids', benefit: 'Precursor Hormone Synthesis', ingredients: ['150g cod', '1 tbsp hemp hearts', '1 tbsp walnuts', 'Mustard'], instructions: ['Spread mustard over cod.', 'Press seed/nut mix on top.', 'Bake 15 mins at 180C.'], description: createDesc("Ensures a perfectly balanced fatty acid ratio for brain health and hormone production.", "Healthy fats in the crust act as vital **precursors** to steroid hormone production.") },
+      { title: 'Sweet Potato Balancer', time: '45 mins', tag: 'Glycemic', benefit: 'HPA-Axis Glycemic Control', ingredients: ['1 sweet potato', '2 tbsp tahini', 'Cinnamon', 'Spinach'], instructions: ['Bake potato whole until soft.', 'Fill with steamed spinach.', 'Drizzle with tahini.'], description: createDesc("A grounding meal beneficial in the second half of your cycle.", "**Complex carbohydrates** prevent the dips that cause mood swings and cravings.") }
+    ],
+    supplements: [
+      { title: 'Curcumin 95%', time: 'Daily', tag: 'Clinical', benefit: 'NF-kB Master Switch Block', icon: <Zap />, ingredients: ['95% Standardized Curcuminoids', 'Piperine Extract'], instructions: ['Take 500mg-1000mg with a meal containing fats.', 'Ensure your brand contains piperine to increase absorption.'], description: createDesc("Concentrated dose of the world's most studied natural anti-inflammatory, impossible to get from the spice alone.", "Inhibits the **NF-kB molecule**, the 'master switch' for cellular inflammation, preventing **pro-inflammatory cytokine** overproduction.") },
+      { title: 'Omega-3 EPA/DHA', time: 'Daily', tag: 'Clinical', benefit: 'Inflammation Resolution', icon: <Droplets />, ingredients: ['High-potency Fish Oil', 'EPA & DHA'], instructions: ['Take daily with largest meal.', 'Keep refrigerated to prevent oxidation.'], description: createDesc("Your body requires **EPA and DHA** to effectively shut down inflammatory pathways; these are the blocks for **resolvins**.", "Omega-3s actively produce specialized pro-resolving mediators (SPMs) that **'resolve' inflammation**, signaling your immune system to start cellular repair.") },
+      { title: 'Magnesium Glycinate', time: 'Daily', tag: 'Clinical', benefit: 'CRP & Cortisol Reduction', icon: <Moon />, ingredients: ['Chelated Magnesium Glycinate'], instructions: ['Take 200mg-400mg 1 hour before bed.', 'Highly bioavailable form.'], description: createDesc("Critical mineral that over 50% of the population is deficient in, acting as a **natural relaxant**.", "Low magnesium is linked to increased **C-reactive protein (CRP)**. Magnesium glycinate helps lower CRP while stabilizing the **HPA axis**.") },
+      { title: 'Boswellia Serrata', time: 'Daily', tag: 'Clinical', benefit: '5-LOX Pathway Inhibition', icon: <Activity />, ingredients: ['Standardized Boswellia Extract'], instructions: ['Take 300mg - 500mg twice daily with food.', 'Look for extracts containing AKBA.'], description: createDesc("Ancient botanical used for centuries to treat chronic inflammation, specifically in the **joints and digestive tract**.", "Specifically inhibits the **5-LOX pathway**, preventing production of **leukotrienes** responsible for chronic pain and asthma.") }
     ]
   };
 
   const handleCopy = (ingredients, title) => {
     let textToCopy = "";
     if (Array.isArray(ingredients)) {
-      textToCopy = `Ingredients for ${title}:\n` + ingredients.map(i => `- ${i}`).join('\n');
+      textToCopy = `Details for ${title}:\n` + ingredients.map(i => `- ${i}`).join('\n');
     } else if (typeof ingredients === 'object') {
       textToCopy = "Master Anti-Inflammatory Ingredient List\n\n";
       ingredients.forEach(section => {
@@ -785,24 +306,19 @@ const App = () => {
 
   const scrollCarousel = (direction) => {
     if (scrollContainerRef.current) {
-      const scrollAmount = window.innerWidth * 0.6;
-      scrollContainerRef.current.scrollBy({
-        left: direction === 'right' ? scrollAmount : -scrollAmount,
-        behavior: 'smooth'
-      });
+      const scrollAmount = window.innerWidth * 0.7;
+      scrollContainerRef.current.scrollBy({ left: direction === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
     }
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [activeTab, selectedRecipe]);
+  useEffect(() => { window.scrollTo(0, 0); }, [activeTab, selectedRecipe]);
 
   const activeCategoryData = allCategories.find(c => c.id === activeTab);
 
   return (
     <div className="min-h-screen relative font-body text-[#1a1a1a] overflow-x-hidden selection:bg-[#f28d35]/30 flex flex-col">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
         :root { --font-heading: 'Plus Jakarta Sans', sans-serif; --font-body: 'Inter', sans-serif; }
         .font-heading { font-family: var(--font-heading); }
         .font-body { font-family: var(--font-body); }
@@ -811,71 +327,106 @@ const App = () => {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #f28d35; border-radius: 10px; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes subtle-glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .animate-subtle-glow { animation: subtle-glow 4s ease-in-out infinite; }
         @keyframes gentle-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
         .animate-gentle-bounce { animation: gentle-bounce 3s ease-in-out infinite; }
       `}</style>
 
       {/* FIXED BACKGROUND */}
       <div className="fixed inset-0 z-[-1] h-[100dvh] w-full" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=2000')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <div className="absolute inset-0 bg-[#e8e7e7]/65 backdrop-blur-[5px]"></div>
+        <div className="absolute inset-0 bg-[#e8e7e7]/70 backdrop-blur-[10px]"></div>
       </div>
 
-      <nav className="sticky top-0 z-40 bg-transparent h-20 flex items-center">
-        <div className="max-w-5xl mx-auto w-full px-4 flex items-center justify-between">
-          <button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="flex items-center space-x-3 text-[#1a1a1a] font-heading font-black text-2xl tracking-tighter uppercase">
-            <Leaf className="w-8 h-8 text-[#f28d35]" />
-            <span className="inline">The Kitchen Hub</span>
+      <nav className="sticky top-0 z-40 bg-transparent h-24 flex items-center">
+        <div className="max-w-6xl mx-auto w-full px-6 flex items-center justify-between">
+          <button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="flex items-center space-x-3 text-[#1a1a1a] font-heading font-black text-2xl tracking-tighter uppercase transition-transform hover:scale-105">
+            <div className="bg-[#1a1a1a] p-2 rounded-xl shadow-lg">
+              <Leaf className="w-6 h-6 text-[#f28d35]" />
+            </div>
+            <span className="hidden sm:inline">The Kitchen Hub</span>
           </button>
-          <button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="text-[#1a1a1a] hover:text-[#f28d35] transition-colors duration-300 animate-gentle-bounce p-2" title="Home">
-            <Home className="w-7 h-7" />
-          </button>
+          
+          <div className="flex items-center space-x-5">
+             <button onClick={() => {setActiveTab('ingredients'); setSelectedRecipe(null);}} className="text-[#1a1a1a] hover:text-[#f28d35] transition-all duration-300 animate-gentle-bounce p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30" title="Ingredients Master List">
+              <ShoppingBasket className="w-6 h-6" />
+            </button>
+            <button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="text-[#1a1a1a] hover:text-[#f28d35] transition-all duration-300 animate-gentle-bounce p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30" title="Home">
+              <Home className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </nav>
 
-      <main className="relative z-10 max-w-5xl mx-auto px-4 pb-20 flex-grow w-full">
+      <main className="relative z-10 max-w-6xl mx-auto px-6 pb-20 flex-grow w-full">
         {selectedRecipe ? (
-          <div className="animate-in slide-in-from-right-8 duration-500 pt-10">
-            <button onClick={() => setSelectedRecipe(null)} className="flex items-center space-x-2 text-[#1a1a1a] font-black uppercase tracking-widest text-xs mb-8 hover:text-[#f28d35] transition-colors">
-              <ChevronLeft className="w-5 h-5" /> <span>Back to {activeTab}</span>
+          <div className="animate-in slide-in-from-right-12 duration-700 pt-10">
+            <button onClick={() => setSelectedRecipe(null)} className="flex items-center space-x-3 text-[#1a1a1a] font-black uppercase tracking-widest text-[10px] mb-12 group">
+              <div className="bg-white/40 p-2 rounded-full group-hover:bg-[#f28d35]/20 transition-colors">
+                <ChevronLeft className="w-4 h-4" />
+              </div>
+              <span>Back to {activeTab}</span>
             </button>
-            <header className="mb-12 border-l-[12px] border-[#f28d35] pl-8">
-              <h2 className="text-5xl md:text-7xl font-black text-[#1a1a1a] tracking-tighter font-heading leading-none mb-6">{selectedRecipe.title}</h2>
-              <div className="flex items-center text-sm font-black uppercase tracking-widest text-[#1a1a1a] bg-[#f28d35] px-6 py-3 rounded-full w-fit font-heading shadow-xl shadow-[#f28d35]/20">
-                <Info className="w-4 h-4 mr-3" /> {selectedRecipe.benefit}
+
+            <header className="mb-16 border-l-[12px] border-[#f28d35] pl-10">
+              <div className="flex flex-wrap items-center gap-4 mb-4">
+                <span className="bg-[#1a1a1a] text-[#f28d35] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">{selectedRecipe.tag || 'Functional'}</span>
+                <span className="bg-white/50 text-[#1a1a1a]/60 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center"><Clock className="w-3 h-3 mr-2" />{selectedRecipe.time || '10m'}</span>
+              </div>
+              <h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black text-[#1a1a1a] tracking-tighter font-heading leading-[0.85] mb-8">{selectedRecipe.title}</h2>
+              <div className="flex items-center text-sm font-black uppercase tracking-widest text-[#1a1a1a] bg-[#f28d35] px-8 py-4 rounded-full w-fit font-heading shadow-2xl shadow-[#f28d35]/30">
+                <ShieldCheck className="w-5 h-5 mr-3" /> {selectedRecipe.benefit}
               </div>
             </header>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-              <div className="lg:col-span-2">
-                <div className="bg-white/40 p-8 md:p-12 rounded-[3rem] border border-[#1a1a1a]/5 mb-12">
-                  {renderFormattedText(selectedRecipe.description)}
+
+            {activeTab === 'supplements' && (
+              <div className="mb-10 p-6 bg-red-50 border-2 border-red-200 rounded-3xl flex items-start space-x-4 shadow-xl">
+                <AlertTriangle className="w-10 h-10 text-red-500 flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="text-red-800 font-black uppercase tracking-widest text-xs mb-1">Clinical Safety Notice</h4>
+                  <p className="text-red-700 font-bold text-sm leading-relaxed">Concentrated supplements can interact with medications. Always consult with a qualified professional before starting a new protocol.</p>
                 </div>
-                <div className="space-y-12">
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
+              <div className="lg:col-span-2">
+                <div className="bg-white/60 backdrop-blur-3xl p-10 md:p-16 rounded-[4rem] border border-white shadow-2xl mb-16 relative overflow-hidden">
+                  <BotanicalIcon />
+                  <div className="relative z-10">
+                    {renderFormattedText(selectedRecipe.description)}
+                  </div>
+                </div>
+
+                <div className="space-y-16">
                   <h4 className="text-[#1a1a1a] font-black uppercase text-xs tracking-[0.5em] flex items-center font-heading opacity-40">
-                    <Utensils className="w-5 h-5 mr-4" /> THE COOKING METHOD
+                    {activeTab === 'supplements' ? <><Pill className="w-6 h-6 mr-4 text-[#f28d35]" /> PROTOCOL DOSAGE</> : <><Utensils className="w-6 h-6 mr-4 text-[#f28d35]" /> THE PREPARATION</>}
                   </h4>
-                  <div className="space-y-10">
+                  <div className="space-y-12">
                     {selectedRecipe.instructions.map((step, idx) => (
-                      <div key={idx} className="flex space-x-8">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#1a1a1a] text-[#f28d35] flex items-center justify-center font-black text-xl shadow-2xl font-heading">{idx + 1}</div>
-                        <p className="text-[#1a1a1a] text-xl md:text-2xl leading-relaxed font-bold pt-1 font-body">{step}</p>
+                      <div key={idx} className="flex space-x-10 group">
+                        <div className="flex-shrink-0 w-16 h-16 rounded-[2rem] bg-[#1a1a1a] text-[#f28d35] flex items-center justify-center font-black text-3xl shadow-2xl transition-transform group-hover:scale-110">{idx + 1}</div>
+                        <p className="text-[#1a1a1a] text-2xl leading-relaxed font-bold pt-1 font-body">{step}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="lg:col-span-1">
-                <div className="sticky top-28">
-                  <div className="flex items-center justify-between mb-8">
-                    <h4 className="text-[#1a1a1a] font-black uppercase text-xs tracking-[0.4em] font-heading opacity-40">INGREDIENTS</h4>
-                    <button onClick={() => handleCopy(selectedRecipe.ingredients, selectedRecipe.title)} className="bg-[#1a1a1a] text-[#f28d35] px-4 py-2 rounded-xl text-[10px] font-black tracking-widest hover:bg-[#252525] transition-all flex items-center space-x-2 active:scale-95 shadow-xl">
-                      {copiedId === selectedRecipe.title ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedId === selectedRecipe.title ? 'COPIED' : 'COPY ALL'}</span>
+
+              <div className="lg:col-span-1 sticky top-32">
+                <div className="bg-white/40 p-10 rounded-[4rem] border border-white shadow-xl">
+                  <div className="flex items-center justify-between mb-10">
+                    <h4 className="text-[#1a1a1a] font-black uppercase text-xs tracking-[0.4em] font-heading opacity-40">{activeTab === 'supplements' ? 'COMPONENTS' : 'INGREDIENTS'}</h4>
+                    <button onClick={() => handleCopy(selectedRecipe.ingredients, selectedRecipe.title)} className="bg-[#1a1a1a] text-[#f28d35] p-3 rounded-2xl hover:bg-[#252525] transition-all active:scale-90 shadow-xl" title="Copy List">
+                      {copiedId === selectedRecipe.title ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                     </button>
                   </div>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {selectedRecipe.ingredients.map((ing, i) => (
-                      <li key={i} className="text-[#1a1a1a] font-bold text-lg flex items-center bg-white/60 p-5 rounded-2xl border border-[#1a1a1a]/5 shadow-sm transition-transform hover:translate-x-2">
-                        <div className="w-2.5 h-2.5 bg-[#f28d35] rounded-full mr-4 flex-shrink-0"></div> {ing}
+                      <li key={i} className="text-[#1a1a1a] font-bold text-lg flex items-start p-2 hover:translate-x-2 transition-transform">
+                        <div className="w-2.5 h-2.5 bg-[#f28d35] rounded-full mr-4 mt-2 flex-shrink-0"></div> {ing}
                       </li>
                     ))}
                   </ul>
@@ -886,71 +437,80 @@ const App = () => {
         ) : (
           <>
             {activeTab === 'home' && (
-              <div className="animate-in fade-in duration-1000">
-                <section className="flex flex-col items-center justify-center text-center pt-16 pb-8 md:pt-24 md:pb-12 px-4">
-                  <div className="inline-flex items-center space-x-3 bg-[#1a1a1a] text-[#f28d35] px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-[0.25em] mb-8 shadow-2xl font-heading">
-                    <Sparkles className="w-4 h-4" /> <span>Anti-Inflammatory Kitchen</span>
+              <div className="animate-in fade-in zoom-in-95 duration-1000">
+                <section className="flex flex-col items-center justify-center text-center pt-20 pb-20 px-4">
+                  <div className="inline-flex items-center space-x-4 bg-[#1a1a1a] text-[#f28d35] px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-12 shadow-2xl animate-float">
+                    <Sparkles className="w-4 h-4" /> <span>Functional Nutrition Hub</span>
                   </div>
-                  <h1 className="text-5xl sm:text-6xl md:text-9xl font-black text-[#1a1a1a] mb-6 tracking-tighter font-heading leading-[1.1] md:leading-[0.9] flex flex-wrap justify-center gap-x-3 md:gap-x-5">
-                    <span>Eat to</span> <span className="text-[#f28d35]">Heal.</span>
+                  <h1 className="text-7xl md:text-[10rem] font-black text-[#1a1a1a] mb-10 tracking-tighter font-heading leading-[0.8] mix-blend-multiply">
+                    Eat to <span className="text-[#f28d35] relative">Heal.</span>
                   </h1>
-                  <p className="text-xl md:text-2xl text-[#1a1a1a] font-bold max-w-2xl mx-auto font-body opacity-80">Harness the power of natural ingredients to boost immunity and reclaim your vitality.</p>
+                  <p className="text-xl md:text-3xl text-[#1a1a1a] font-medium max-w-3xl mx-auto opacity-70 leading-relaxed font-body">
+                    Science-backed recipes to dampen inflammation, reset hormones, and reclaim your vitality.
+                  </p>
                 </section>
-                <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 md:grid md:grid-cols-4 pt-4 pb-6 px-4 md:px-0 -mt-4">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 px-4 md:px-0">
                   {mainCategories.map(cat => (
-                    <button key={cat.id} onClick={() => setActiveTab(cat.id)} className="flex-shrink-0 w-[75vw] md:w-auto group relative bg-[#1a1a1a]/90 backdrop-blur-xl rounded-[3.5rem] shadow-2xl hover:shadow-[#f28d35]/20 snap-center transition-all border border-white/10 text-left overflow-hidden h-[35rem] md:h-[26rem] hover:-translate-y-2">
-                      <img src={cat.image} alt={cat.name} className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale-[40%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/20 to-transparent"></div>
-                      <div className="absolute bottom-0 left-0 right-0 p-10 text-[#e8e7e7]">
-                        <div className="w-14 h-14 bg-[#f28d35] rounded-2xl flex items-center justify-center mb-6 shadow-xl text-[#1a1a1a]">{cat.icon}</div>
-                        <h2 className="font-black text-3xl mb-2 font-heading tracking-tighter uppercase leading-none">{cat.name}</h2>
-                        <p className="text-[#f28d35] text-[10px] font-black uppercase tracking-[0.2em] font-heading">Digital Collection</p>
+                    <button key={cat.id} onClick={() => setActiveTab(cat.id)} className="group relative bg-[#1a1a1a] rounded-[4rem] shadow-2xl hover:shadow-[#f28d35]/30 transition-all border border-white/10 text-left overflow-hidden h-[30rem] hover:-translate-y-4 active:scale-95 duration-500">
+                      <img src={cat.image} alt={cat.name} className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-1000" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 right-0 p-12 text-[#e8e7e7] flex flex-col items-center text-center">
+                        <div className="w-16 h-16 bg-[#f28d35] rounded-3xl flex items-center justify-center mb-8 shadow-2xl transition-transform group-hover:rotate-12">
+                          <div className="text-[#1a1a1a]">{cat.icon}</div>
+                        </div>
+                        <h2 className="font-black text-4xl mb-2 font-heading tracking-tighter uppercase leading-none">{cat.name}</h2>
+                        <p className="text-[#f28d35] text-[10px] font-black uppercase tracking-[0.3em] font-heading opacity-60">Digital Collection</p>
                       </div>
                     </button>
                   ))}
                 </div>
-                <div className="w-full mb-6">
-                  <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pt-4 pb-6 px-4 md:px-0 md:justify-center -mt-4">
-                    {specialCategories.map(cat => (
-                      <button key={cat.id} onClick={() => setActiveTab(cat.id)} className="flex-shrink-0 w-[75vw] md:w-auto snap-center bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/10 text-[#e8e7e7] px-8 py-5 rounded-full font-heading font-black tracking-[0.2em] text-xs hover:bg-[#f28d35] hover:text-[#1a1a1a] transition-all shadow-2xl hover:-translate-y-2 uppercase flex items-center justify-center space-x-3 group">
-                        <span className="text-[#f28d35] group-hover:text-[#1a1a1a] flex-shrink-0">{cat.icon}</span>
-                        <span className="truncate">{cat.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex justify-center mt-2 mb-10">
-                  <button onClick={() => setActiveTab('ingredients')} className="bg-[#1a1a1a] text-[#e8e7e7] px-8 py-3 rounded-[2rem] font-black shadow-2xl hover:bg-[#252525] hover:-translate-y-1 transition-all text-sm font-heading tracking-[0.1em] uppercase">VIEW MASTER INGREDIENTS</button>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 md:px-0">
+                  {specialCategories.map(cat => (
+                    <button 
+                      key={cat.id} 
+                      onClick={() => setActiveTab(cat.id)} 
+                      className="flex items-center justify-center space-x-4 bg-white/20 backdrop-blur-2xl text-[#1a1a1a] h-24 rounded-[2.5rem] font-heading font-black tracking-[0.1em] text-xs hover:bg-[#1a1a1a] hover:text-[#f28d35] transition-all border border-white/40 shadow-xl hover:-translate-y-2 group relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <span className="text-[#f28d35] relative z-10">{cat.icon}</span>
+                      <span className="uppercase relative z-10">{cat.name}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
-            {['smoothies', 'breakfast', 'lunch', 'dinner', 'perimenopause', 'endometriosis', 'hormones', 'ingredients'].includes(activeTab) && (
-              <div className="animate-in fade-in slide-in-from-bottom-8 duration-600 pt-16 md:pt-20">
-                <header className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-20 border-l-[10px] border-[#f28d35] pl-6 md:pl-10 mx-2 md:mx-0">
+            
+            {activeTab !== 'home' && (
+              <div className="animate-in fade-in slide-in-from-bottom-12 duration-700 pt-16 md:pt-24">
+                <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 border-l-[12px] border-[#f28d35] pl-10 mx-2 md:mx-0">
                   <div className="max-w-2xl">
                     <div className="flex items-center space-x-4 mb-6">
-                      <div className={`p-4 rounded-2xl bg-[#1a1a1a] shadow-xl border border-white/10 text-[#f28d35]`}>{allCategories.find(c => c.id === activeTab)?.icon || <Utensils className="w-5 h-5" />}</div>
-                      <span className="text-[#1a1a1a] font-black uppercase tracking-[0.4em] text-xs font-heading opacity-40">Science-Backed Collection</span>
+                      <div className={`p-5 rounded-3xl bg-[#1a1a1a] shadow-2xl text-[#f28d35]`}>{allCategories.find(c => c.id === activeTab)?.icon || <Utensils className="w-6 h-6" />}</div>
+                      <span className="text-[#1a1a1a] font-black uppercase tracking-[0.5em] text-[10px] font-heading opacity-40 animate-pulse">{activeTab === 'supplements' ? 'Clinical Protocol' : 'Nutritional Medicine'}</span>
                     </div>
-                    <h1 className="text-4xl sm:text-5xl md:text-8xl font-black text-[#1a1a1a] capitalize tracking-tighter font-heading mb-6 md:mb-8 leading-tight md:leading-none break-words hyphens-auto">{activeTab}</h1>
+                    <h1 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black text-[#1a1a1a] capitalize tracking-tighter font-heading mb-6 leading-[0.8]">{activeTab}</h1>
                   </div>
                 </header>
+
                 {activeTab === 'ingredients' ? (
-                  <article className="bg-[#e8e7e7]/80 backdrop-blur-3xl rounded-[3rem] md:rounded-[4rem] p-8 md:p-14 shadow-2xl border border-white mx-2 md:mx-0 relative">
-                    <div className="absolute top-8 right-8 md:top-14 md:right-14">
-                      <button onClick={() => handleCopy(masterIngredientsData, 'Master List')} className="bg-[#1a1a1a] text-[#f28d35] px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-[#252525] transition-all flex items-center space-x-2 active:scale-95">
-                        {copiedId === 'Master List' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                        <span>{copiedId === 'Master List' ? 'COPIED TO CLIPBOARD' : 'COPY MASTER LIST'}</span>
+                  <article className="bg-white/40 backdrop-blur-3xl rounded-[5rem] p-12 md:p-20 shadow-2xl border border-white mx-2 md:mx-0 relative overflow-hidden">
+                    <BotanicalIcon />
+                    <div className="absolute top-12 right-12">
+                      <button onClick={() => handleCopy(masterIngredientsData, 'Master List')} className="bg-[#1a1a1a] text-[#f28d35] px-10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-[#252525] transition-all flex items-center space-x-3 active:scale-95">
+                        {copiedId === 'Master List' ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                        <span>{copiedId === 'Master List' ? 'COPIED' : 'COPY ALL'}</span>
                       </button>
                     </div>
                     {masterIngredientsData.map((section, idx) => (
-                      <div key={idx} className="mb-12 last:mb-0">
-                        <h2 className="text-xl font-black text-[#1a1a1a] mb-6 border-b-4 border-[#f28d35] pb-2 font-heading tracking-tight inline-block uppercase">{section.title}</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      <div key={idx} className="mb-16 last:mb-0 relative z-10">
+                        <h2 className="text-2xl font-black text-[#1a1a1a] mb-10 border-b-4 border-[#f28d35] pb-3 font-heading tracking-tighter inline-block uppercase">{section.title}</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                           {section.items.map((item, i) => (
-                            <div key={i} className="flex items-center space-x-4 text-[#1a1a1a] bg-[#1a1a1a]/5 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:scale-105">
-                              <div className="w-2.5 h-2.5 rounded-full bg-[#f28d35] shadow-sm flex-shrink-0"></div>
-                              <span className="font-bold text-sm tracking-tight font-body">{item}</span>
+                            <div key={i} className="flex items-center space-x-5 text-[#1a1a1a] bg-white/60 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-sm transition-all hover:scale-105 hover:bg-white/80">
+                              <div className="w-3 h-3 rounded-full bg-[#f28d35] shadow-sm flex-shrink-0 animate-subtle-glow"></div>
+                              <span className="font-bold text-lg tracking-tight font-body">{item}</span>
                             </div>
                           ))}
                         </div>
@@ -958,27 +518,55 @@ const App = () => {
                     ))}
                   </article>
                 ) : (
-                  <div className="relative group">
-                    <button onClick={() => scrollCarousel('left')} className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white shadow-xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white transition-all opacity-0 group-hover:opacity-100"><ChevronLeft className="w-8 h-8" /></button>
-                    <button onClick={() => scrollCarousel('right')} className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white shadow-xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white transition-all opacity-0 group-hover:opacity-100"><ChevronRight className="w-8 h-8" /></button>
-                    <div ref={scrollContainerRef} className="flex overflow-x-auto items-stretch snap-x snap-mandatory hide-scrollbar gap-6 pt-4 pb-8 px-4 md:px-0 -mt-4 scroll-smooth">
+                  <div className="relative group px-2 md:px-0">
+                    <button onClick={() => scrollCarousel('left')} className="hidden md:flex absolute -left-8 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md"><ChevronLeft className="w-8 h-8" /></button>
+                    <button onClick={() => scrollCarousel('right')} className="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md"><ChevronRight className="w-8 h-8" /></button>
+                    
+                    <div ref={scrollContainerRef} className="flex overflow-x-auto items-stretch snap-x snap-mandatory hide-scrollbar gap-8 pt-4 pb-12 scroll-smooth">
                       {data[activeTab]?.map((item, idx) => (
-                        <article key={idx} className="flex-shrink-0 w-[85vw] md:w-[450px] snap-center bg-[#1a1a1a]/85 backdrop-blur-xl rounded-[3rem] md:rounded-[4rem] p-8 md:p-12 shadow-2xl border border-white/10 flex flex-col h-full hover:shadow-[#f28d35]/10 hover:-translate-y-3 transition-all duration-500">
-                          <div className="flex justify-between items-start mb-8 md:mb-10">
-                            <h2 className="text-3xl md:text-4xl font-black text-[#e8e7e7] leading-tight font-heading tracking-tighter">{item.title}</h2>
-                            <button onClick={() => setSelectedRecipe(item)} className="p-4 md:p-5 bg-[#f28d35] rounded-2xl md:rounded-3xl text-[#1a1a1a] shadow-[inset_2px_2px_4px_rgba(255,255,255,0.5),inset_-2px_-2px_4px_rgba(0,0,0,0.15),4px_4px_8px_rgba(0,0,0,0.2)] hover:shadow-[inset_3px_3px_6px_rgba(255,255,255,0.6),inset_-3px_-3px_6px_rgba(0,0,0,0.2),6px_6px_12px_rgba(0,0,0,0.3)] ml-4 flex-shrink-0 transition-all active:scale-95"><Info className="w-6 h-6 md:w-7 md:h-7" /></button>
+                        <article key={idx} className="flex-shrink-0 w-[88vw] md:w-[500px] snap-center bg-[#1a1a1a] rounded-[5rem] p-12 shadow-2xl border border-white/5 flex flex-col min-h-[46rem] hover:-translate-y-4 transition-all duration-700 group/card relative overflow-hidden">
+                          <BotanicalIcon />
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#f28d35]/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none"></div>
+                          
+                          <div className="flex flex-col mb-10 relative z-10">
+                            <div className="flex items-center space-x-3 mb-4">
+                              <span className="text-[#f28d35] text-[10px] font-black uppercase tracking-[0.2em]">{item.tag || 'Functional'}</span>
+                              <span className="w-1.5 h-1.5 bg-white/20 rounded-full"></span>
+                              <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] flex items-center"><Clock className="w-3 h-3 mr-1" />{item.time || '10m'}</span>
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-black text-[#e8e7e7] leading-[0.9] font-heading tracking-tighter group-hover/card:text-[#f28d35] transition-colors pr-20">{item.title}</h2>
                           </div>
-                          <div className="flex items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#1a1a1a] bg-[#f28d35] px-4 md:px-6 py-2 md:py-3 rounded-full w-fit mb-8 md:mb-12 font-heading shadow-lg shadow-[#f28d35]/20"><Zap className="w-4 h-4 mr-2.5 flex-shrink-0" />{item.benefit}</div>
-                          <div className="mb-10 md:mb-14 flex-grow">
-                            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-6 md:mb-8 font-heading">The Ingredients</h3>
-                            <ul className="space-y-4 md:space-y-5">
-                              {item.ingredients.slice(0, 4).map((ing, i) => (
-                                <li key={i} className="text-[#e8e7e7] text-base md:text-lg font-bold flex items-center font-body opacity-80"><div className="w-2 h-2 md:w-2.5 md:h-2.5 bg-[#f28d35] rounded-full mr-4 md:mr-5 shadow-sm flex-shrink-0"></div>{ing}</li>
+                          
+                          <div className="relative z-10 flex items-center text-[10px] font-black uppercase tracking-widest text-[#1a1a1a] bg-[#f28d35] px-6 py-3 rounded-full w-fit mb-12 font-heading shadow-xl shadow-[#f28d35]/20">
+                            {activeTab === 'supplements' ? <Pill className="w-4 h-4 mr-3 flex-shrink-0" /> : <ShieldCheck className="w-4 h-4 mr-3 flex-shrink-0" />}
+                            {item.benefit}
+                          </div>
+
+                          <div className="mb-14 flex-grow relative z-10 overflow-hidden">
+                            <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-6 font-heading">Key Components</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {item.ingredients.slice(0, 7).map((ing, i) => (
+                                <span key={i} className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-white/60 text-xs font-bold font-body">{ing}</span>
                               ))}
-                              {item.ingredients.length > 4 && <li className="text-[#f28d35] text-xs font-black uppercase tracking-widest pl-6">+{item.ingredients.length - 4} More...</li>}
-                            </ul>
+                              {item.ingredients.length > 7 && <span className="px-4 py-2 text-[#f28d35] text-[10px] font-black uppercase">+{item.ingredients.length - 7} More</span>}
+                            </div>
                           </div>
-                          <button onClick={() => setSelectedRecipe(item)} className="w-full py-5 md:py-6 bg-white/5 text-[#f28d35] border-2 border-[#f28d35] text-base md:text-lg font-black rounded-[1.5rem] md:rounded-3xl hover:bg-[#f28d35] hover:text-[#1a1a1a] shadow-2xl transition-all flex items-center justify-center active:scale-95 font-heading tracking-tighter mt-auto">VIEW FULL METHOD</button>
+
+                          <div className="mt-auto pt-6 flex items-center justify-between relative z-10 border-t border-white/5">
+                             <button 
+                                onClick={() => setSelectedRecipe(item)}
+                                className="flex items-center space-x-2 text-[#f28d35] hover:text-white transition-colors group/link"
+                              >
+                                <Sparkles className="w-5 h-5" />
+                                <span className="text-[11px] font-black uppercase tracking-[0.2em]">Scientific Profile</span>
+                              </button>
+                              <button 
+                                onClick={() => setSelectedRecipe(item)}
+                                className="w-14 h-14 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-[#f28d35] hover:text-[#1a1a1a] transition-all"
+                              >
+                                <ChevronRight className="w-6 h-6" />
+                              </button>
+                          </div>
                         </article>
                       ))}
                     </div>
@@ -990,27 +578,31 @@ const App = () => {
         )}
       </main>
 
-      <footer className="relative z-10 py-16 px-4 bg-transparent mt-auto border-t border-[#1a1a1a]/10">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-12">
-          <div className="flex items-center space-x-3 text-[#1a1a1a] font-heading font-black text-xl tracking-tighter"><Leaf className="w-7 h-7 text-[#f28d35]" /><span>The Kitchen Hub</span></div>
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-y-8 md:gap-x-12">
-            <div className="flex items-center"><button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="text-sm md:text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">HOME</button></div>
-            <div className="hidden md:block w-px bg-[#1a1a1a]/20 min-h-[80px]"></div>
-            <div className="flex flex-col items-center md:items-start space-y-5 md:space-y-3 justify-center">
-              {['breakfast', 'lunch', 'dinner'].map(id => {
-                const cat = mainCategories.find(c => c.id === id);
-                return <button key={id} onClick={() => { setActiveTab(id); setSelectedRecipe(null); }} className="text-sm md:text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">{cat?.name}</button>
-              })}
+      <footer className="relative z-10 py-20 px-6 bg-transparent border-t border-black/5 mt-auto">
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-12">
+          <div className="flex items-center space-x-4 text-[#1a1a1a] font-heading font-black text-3xl tracking-tighter transition-transform hover:scale-105">
+            <div className="bg-[#1a1a1a] p-2 rounded-xl shadow-lg">
+              <Leaf className="w-8 h-8 text-[#f28d35]" />
             </div>
-            <div className="hidden md:block w-px bg-[#1a1a1a]/20 min-h-[80px]"></div>
-            <div className="flex flex-col items-center md:items-start space-y-5 md:space-y-3 justify-center">
-              {['endometriosis', 'hormones', 'perimenopause'].map(id => {
-                const cat = specialCategories.find(c => c.id === id);
-                return <button key={id} onClick={() => { setActiveTab(id); setSelectedRecipe(null); }} className="text-sm md:text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">{cat?.name}</button>
-              })}
-            </div>
+            <span>The Kitchen Hub</span>
           </div>
-          <p className="w-full md:w-auto text-[10px] text-[#1a1a1a] font-black uppercase tracking-[0.4em] font-heading opacity-30 text-center md:text-right mt-4 md:mt-0">Functional Recovery</p>
+          
+          <nav className="flex flex-wrap justify-center gap-x-12 gap-y-6">
+            <button onClick={() => { setActiveTab('home'); setSelectedRecipe(null); }} className="text-sm font-black uppercase tracking-[0.4em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">HOME</button>
+            <div className="hidden md:block w-px h-6 bg-black/10"></div>
+            {mainCategories.map(cat => (
+              <button key={cat.id} onClick={() => { setActiveTab(cat.id); setSelectedRecipe(null); }} className="text-sm font-black uppercase tracking-[0.4em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">{cat.name}</button>
+            ))}
+            <div className="hidden md:block w-px h-6 bg-black/10"></div>
+            {specialCategories.map(cat => (
+              <button key={cat.id} onClick={() => { setActiveTab(cat.id); setSelectedRecipe(null); }} className="text-sm font-black uppercase tracking-[0.4em] text-[#1a1a1a] hover:text-[#f28d35] transition-all font-heading opacity-60 hover:opacity-100">{cat.name}</button>
+            ))}
+          </nav>
+
+          <div className="flex flex-col items-center gap-4 text-center">
+            <p className="text-[10px] text-[#1a1a1a] font-black uppercase tracking-[0.5em] font-heading opacity-30">Functional Recovery • Natural Medicine • Precision Nutrition</p>
+            <p className="text-[9px] text-[#1a1a1a] font-bold uppercase tracking-[0.2em] opacity-20">© 2026 Functional Kitchen Hub Project</p>
+          </div>
         </div>
       </footer>
     </div>
