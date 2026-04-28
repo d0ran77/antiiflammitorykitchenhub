@@ -105,10 +105,10 @@ const App = () => {
   ];
 
   const specialCategories = [
-    { id: 'perimenopause', name: 'Perimenopause', icon: <Activity className="w-5 h-5" /> },
-    { id: 'endometriosis', name: 'Endometriosis', icon: <Activity className="w-5 h-5" /> },
-    { id: 'hormones', name: 'Hormones', icon: <Activity className="w-5 h-5" /> },
-    { id: 'supplements', name: 'Supplements', icon: <Pill className="w-5 h-5" /> }
+    { id: 'perimenopause', name: 'Perimenopause', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'endometriosis', name: 'Endometriosis', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'hormones', name: 'Hormones', icon: <Activity className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800&h=1200' },
+    { id: 'supplements', name: 'Supplements', icon: <Pill className="w-5 h-5" />, image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800&h=1200' }
   ];
 
   const allCategories = [...mainCategories, ...specialCategories];
@@ -299,9 +299,14 @@ const App = () => {
         .animate-gentle-bounce { animation: gentle-bounce 3s ease-in-out infinite; }
       `}</style>
 
-      {/* FIXED BACKGROUND */}
-      <div className="fixed inset-0 z-[-1] h-[100dvh] w-full" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=2000')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <div className="absolute inset-0 bg-[#e8e7e7]/70 backdrop-blur-[10px]"></div>
+      {/* FIXED BACKGROUND - OPTIMIZED FOR MOBILE */}
+      <div className="fixed inset-0 z-[-1] bg-[#e8e7e7]">
+        <img 
+          src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=2000" 
+          alt="Kitchen Background" 
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[#e8e7e7]/70 backdrop-blur-[10px] transform-gpu"></div>
       </div>
 
       <nav className="sticky top-0 z-40 bg-transparent h-24 flex items-center">
@@ -486,8 +491,8 @@ const App = () => {
                 ) : (
                   <div className="relative group px-0 md:px-6 lg:px-8">
                     {/* ARROWS (Desktop only) safely inside the padding to prevent clipping */}
-                    <button onClick={() => scrollCarousel('left')} className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><ChevronLeft className="w-8 h-8" /></button>
-                    <button onClick={() => scrollCarousel('right')} className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><ChevronRight className="w-8 h-8" /></button>
+                    <button onClick={() => scrollCarousel('left')} className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><ChevronLeft className="w-8 h-8" /></button>
+                    <button onClick={() => scrollCarousel('right')} className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-16 h-16 bg-white shadow-2xl rounded-full items-center justify-center text-[#1a1a1a] hover:bg-[#f28d35] hover:text-white border border-black/5 backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><ChevronRight className="w-8 h-8" /></button>
                     
                     <div ref={scrollContainerRef} className="flex overflow-x-auto items-stretch snap-x snap-mandatory hide-scrollbar gap-6 md:gap-8 pt-6 pb-16 px-4 md:px-2 scroll-smooth">
                       {data[activeTab]?.map((item, idx) => (
